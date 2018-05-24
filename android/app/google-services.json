@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "551783517327",
+    "firebase_url": "https://futupolis-7c942.firebaseio.com",
+    "project_id": "futupolis-7c942",
+    "storage_bucket": "futupolis-7c942.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551783517327:android:4a2c5bb9c0c0992e",
+        "android_client_info": {
+          "package_name": "com.futupolis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551783517327-e2s2oq5i301rbik0677c5m7gsd24arhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgE857xD-yB2LQzIIXQgviPW43wKAjc0w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

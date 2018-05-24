@@ -1,0 +1,6 @@
+export default {
+  IMAGE: 'IMAGE',
+  TEXT: 'TEXT',
+  CHECK_IN_EVENT: 'CHECK_IN_EVENT',
+  COMMENT: 'COMMENT',
+};
