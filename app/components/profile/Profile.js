@@ -101,7 +101,7 @@ class Profile extends Component {
         tabBarActiveTextColor={theme.blush}
         tabBarBackgroundColor={theme.dark}
         tabBarInactiveTextColor={theme.inactive}
-        locked={IOS}
+        locked={false}
         prerenderingSiblingsNumber={0}
         renderTabBar={() => <TabBarItem height={50} />}
       >

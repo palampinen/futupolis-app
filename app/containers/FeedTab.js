@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Animated } from 'react-native';
+import { StyleSheet, ScrollView, View, Animated, TouchableOpacity } from 'react-native';
 import { ImagePickerManager } from 'NativeModules';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
@@ -149,11 +149,13 @@ class FeedTab extends Component {
 
         <View style={feedStyles}>
           {isMapPageVisible && !selectedMapMarker &&
-            <PlatformTouchable onPress={this.props.showFeedView}>
-              <AnimateMe animationType="slide-fully-from-bottom" style={styles.toggleFeed} duration={300}>
-                <Text style={styles.toggleFeedText} bold>Back to List</Text>
-              </AnimateMe>
-            </PlatformTouchable>
+            <AnimateMe animationType="slide-fully-from-bottom" style={styles.toggleFeed} duration={300}>
+              <PlatformTouchable onPress={this.props.showFeedView} activeOpacity={0.8}>
+                <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={styles.toggleFeedText} bold>Back to List</Text>
+                </View>
+              </PlatformTouchable>
+            </AnimateMe>
           }
 
           <FeedList
@@ -212,6 +214,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
+    backgroundColor: theme.dark,
   },
   toggleFeed: {
     height: 56,

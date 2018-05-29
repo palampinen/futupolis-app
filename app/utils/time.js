@@ -32,8 +32,8 @@ function formatEventTime(startTime, endTime, opts) {
   formatted.time = startMoment.utc().format(usedFormat.time);
   formatted.endTime = endMoment.utc().format(usedFormat.time);
 
-  formatted.onGoing = eventIsOnGoing(startTime, endTime);
-  formatted.startsSoon = eventStartsSoon(startTime);
+  // formatted.onGoing = eventIsOnGoing(startTime, endTime);
+  // formatted.startsSoon = eventStartsSoon(startTime);
 
   return formatted;
 }
@@ -86,7 +86,20 @@ function getTimeAgo(date) {
   }
 }
 
+const formatActionTime = (ISODate) => {
+  const today = moment();
+  const date = moment(ISODate);
+
+  let format = 'ddd DD.MM. [at] HH:mm';
+  if (today.isSame(date, 'day')) {
+    format = 'HH:mm';
+  }
+
+  return date.format(format);
+}
+
 export default {
+  formatActionTime,
   formatEventTime,
   eventIsOnGoing,
   getEventDay,

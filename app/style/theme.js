@@ -39,7 +39,8 @@ const theme = {
   green: '#329E41',
   blue: '#16AAE8',
   blush: '#FC9370',
-  greyish: '#333',
+
+  greyish: 'rgba(255,255,255, .05)',
 
   sima: '#e5a74b',
   simaDark: '#e29816',

@@ -15,13 +15,7 @@ const styles = StyleSheet.create({
   navigator: {
     paddingTop: Platform.OS === 'ios' ? 20 : 0,
     paddingBottom: 0,
-  },
-  navbar: {
-    backgroundColor: theme.secondary,
-    height: 62,
-    paddingBottom: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    backgroundColor: theme.dark,
   },
 });
 

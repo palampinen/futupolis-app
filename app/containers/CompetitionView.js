@@ -29,11 +29,6 @@ class CompetitionView extends Component {
     analytics.viewOpened(VIEW_NAME);
   }
 
-  @autobind
-  onRefreshFeed(){
-    this.props.fetchTeams();
-  }
-
   render() {
     let topscore = 0;
     this.props.teams.map((team) => {
@@ -43,7 +38,7 @@ class CompetitionView extends Component {
 
     const refreshControl = <RefreshControl
       refreshing={this.props.isRefreshing}
-      onRefresh={this.onRefreshFeed}
+      onRefresh={this.props.fetchTeams}
       colors={[theme.primary]}
       tintColor={theme.primary}
       progressBackgroundColor={theme.light} />;

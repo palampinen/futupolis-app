@@ -1,7 +1,12 @@
 import { fromJS } from 'immutable';
+
 import Tabs from '../constants/Tabs';
 import { fetchFeed, refreshFeed } from '../actions/feed';
-import { fetchPostsForCity, selectMarker, clearSelectedMarker, checkIfPostExists } from './user-map';
+import { fetchMapPosts, selectMarker, clearSelectedMarker, checkIfPostExists } from './user-map';
+
+
+// # Selectors
+export const getFeedViewType = state => state.feedViewType.get('type');
 
 // # Action creators
 export const SET_FEED_VIEW_TYPE = 'sortType/SET_FEED_VIEW_TYPE';
@@ -15,10 +20,10 @@ export const setFeedViewType = (payload) => dispatch =>
       dispatch(clearSelectedMarker());
       refreshFn = refreshFeed;
     } else {
-      refreshFn = fetchPostsForCity;
+      refreshFn = fetchMapPosts;
     }
 
-    return dispatch(refreshFn());
+    // return dispatch(refreshFn());
   });
 
 
@@ -31,11 +36,6 @@ export const openFeedItemInMap = (item) => dispatch =>
   .then(() => {
     return dispatch(selectMarker(item.id))
   })
-
-
-// # Selectors
-export const getFeedViewType = state => state.feedViewType.get('type');
-
 
 // # Reducer
 const initialState = fromJS({

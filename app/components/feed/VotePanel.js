@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import autobind from 'autobind-decorator';
 
 import Text from '../Text';
@@ -39,11 +39,10 @@ class VotePanel extends Component {
 
     return (
       <View style={styles.itemVoteButtonWrap}>
-        <TouchableHighlight
+        <TouchableOpacity
           // disabled={alreadyVotedThis}
-          activeOpacity={1}
+          activeOpacity={0.9}
           style={styles.itemVoteButton}
-          underlayColor={'rgba(0,0,0,.05)'}
           onPress={() => this.voteThisItem(value)}
         >
           <View style={styles.itemVoteButton}>
@@ -57,7 +56,7 @@ class VotePanel extends Component {
               </Text>
               */}
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
   itemVoteWrapper: {
     flexDirection: 'row',
     paddingVertical: 5,
-    paddingLeft: 0,
+    paddingLeft: 16,
     marginLeft: 8,
     minWidth: 45,
     minHeight: 42,
@@ -88,22 +87,19 @@ const styles = StyleSheet.create({
   },
   itemVoteButtonWrap: {
     flex: 1,
-    width: 28,
+    width: 40,
     height: 28,
     top: 1,
-    borderRadius: 14,
-    overflow: 'hidden',
     backgroundColor: 'transparent',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   itemVoteButton: {
     flex: 1,
-    width: 28,
+    width: 40,
     height: 28,
-    borderRadius: 14,
     backgroundColor: 'transparent',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     marginRight: 0,
   },
@@ -113,6 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingVertical: 5,
     top: 4,
+    left: -3,
     color: theme.grey,
   },
   voteImage: {

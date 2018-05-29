@@ -50,7 +50,7 @@
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
-      <!-- react-native-push-notification -->
+      <!-- react-native-push-notification
       <receiver
         android:name="com.google.android.gms.gcm.GcmReceiver"
         android:exported="true"
@@ -76,8 +76,27 @@
           <action android:name="com.google.android.c2dm.intent.RECEIVE" />
         </intent-filter>
       </service>
-      <!-- react-native-push-notification End -->
+      react-native-push-notification End -->
 
+
+      <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+        <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+      </service>
+      <service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
+        <intent-filter>
+          <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+        </intent-filter>
+      </service>
+
+
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/ic_notification" />
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/notificationColor" />
 
     </application>
 

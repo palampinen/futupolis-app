@@ -21,6 +21,8 @@ import TripInfoView from './TripInfoView';
 import Header from '../components/common/MainHeader';
 import AndroidTabs from 'react-native-scrollable-tab-view';
 import Tabs from '../constants/Tabs';
+import PopupInfo from './PopupInfo';
+import LightBox from '../components/lightbox/Lightbox';
 
 const theme = require('../style/theme');
 const IconTabBar = require('../components/common/MdIconTabBar');
@@ -65,17 +67,17 @@ class AndroidTabNavigation extends Component {
           <FeedView
             id={Tabs.FEED}
             navigator={navigator}
-            tabLabel={{ title: 'Feed', icon: 'whatshot' }}
+            tabLabel={{ title: 'Feed', icon: 'forum' }}
           />
           <CalendarView
             id={Tabs.CALENDAR}
             navigator={navigator}
-            tabLabel={{ title: 'Event', icon: 'access-time' }}
+            tabLabel={{ title: 'Event', icon: 'event' }}
           />
           <TripInfoView
             navigator={navigator}
             id={Tabs.NOTIFICATIONS}
-            tabLabel={{ title: 'Trip', icon: 'flight-takeoff', badge: /*'•'*/ }}
+            tabLabel={{ title: 'Trip', icon: 'flight-takeoff' }}
           />
           <ProfileView
             id={Tabs.SETTINGS}
@@ -83,6 +85,8 @@ class AndroidTabNavigation extends Component {
             tabLabel={{ title: 'Info', icon: 'account-circle', image: profilePicture }}
           />
         </AndroidTabs>
+        <LightBox navigator={navigator} />
+        <PopupInfo navigator={navigator} />
       </View>
     );
   }

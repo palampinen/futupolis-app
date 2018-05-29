@@ -17,13 +17,18 @@ import ScrollTabs from 'react-native-scrollable-tab-view';
 
 import theme from '../style/theme';
 import { fetchLinks } from '../actions/profile';
+import { changeTripTab } from '../actions/navigation';
+import { getCurrentTab, getCurrentTripViewTab } from '../reducers/navigation';
 
 import NotificationList from '../components/notification/NotificationList';
 import TabBarItem from '../components/tabs/Tabs';
 import ListItem from '../components/profile/ListItem';
+import Tabs from '../constants/Tabs';
 
 const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
+const TAB_ORDER = [Tabs.INFO, Tabs.NOTIFICATIONS];
+const initialTabIndex = 0;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,7 +51,6 @@ const styles = StyleSheet.create({
 class Profile extends Component {
   propTypes: {
     dispatch: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
     links: PropTypes.object.isRequired,
   };
 
@@ -55,32 +59,53 @@ class Profile extends Component {
   }
 
   @autobind
+  onChangeTab({ ref }) {
+    this.props.changeTripTab(ref.props.id);
+  }
+
+  @autobind
   renderItem(item, index) {
-    return <ListItem index={index} item={item} navigator={this.props.navigator} currentTab={this.props.currentTab}  />;
+    return <ListItem
+      index={index}
+      item={item}
+      key={item.id}
+      navigator={this.props.navigator}
+      currentTab={this.props.currentTab}
+    />;
   }
 
   @autobind
   renderContent() {
-    const { name, links, user, profilePicture, logoutUser } = this.props;
-
+    const { links, profilePicture, currentTripTab } = this.props;
     const listData = [].concat(links.toJS());
+
+    let page = TAB_ORDER.indexOf(currentTripTab);
+    if (page < 0) {
+      page = initialTabIndex;
+    }
+
 
     return (
       <ScrollTabs
-        initialPage={0}
+        initialPage={initialTabIndex}
+        page={page}
+        onChangeTab={this.onChangeTab}
         tabBarActiveTextColor={theme.blush}
         tabBarBackgroundColor={theme.dark}
         tabBarInactiveTextColor={theme.inactive}
-        locked={IOS}
+        locked={false}
         prerenderingSiblingsNumber={0}
         renderTabBar={() => <TabBarItem height={40} />}
       >
-        <ScrollView tabLabel="Info" style={styles.scrollView}>
+        <ScrollView tabLabel="Info" style={styles.scrollView} id={Tabs.INFO}>
           <View style={styles.cardWrap}>
             {listData.map(this.renderItem)}
           </View>
         </ScrollView>
-        <NotificationList tabLabel="Notifications" navigator={this.props.navigator} />
+        <NotificationList
+          tabLabel="News"
+          navigator={this.props.navigator}
+          id={Tabs.NOTIFICATIONS} />
       </ScrollTabs>
     );
   }
@@ -95,11 +120,12 @@ class Profile extends Component {
   }
 }
 
-const mapDispatchToProps = { fetchLinks };
+const mapDispatchToProps = { fetchLinks, changeTripTab };
 
 const select = store => ({
   links: store.profile.get('links'),
-  currentTab: store.navigation.get('currentTab'),
+  currentTab: getCurrentTab(store),
+  currentTripTab: getCurrentTripViewTab(store),
 });
 
 export default connect(select, mapDispatchToProps)(Profile);

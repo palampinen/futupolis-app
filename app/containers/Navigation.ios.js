@@ -15,6 +15,7 @@ import SettingsView from './ProfileView';
 import TripInfoView from './TripInfoView';
 
 import Tabs from '../constants/Tabs';
+import PopupInfo from './PopupInfo';
 import { getUserPicture } from '../concepts/registration';
 import { hasNewNotifications } from '../concepts/notifications';
 import { changeTab } from '../actions/navigation';
@@ -27,10 +28,14 @@ import ICONS from '../constants/Icons';
 const theme = require('../style/theme');
 
 const initialTabIndex = 0;
-const initialTab = Tabs.FEED;
+const TAB_ORDER = [Tabs.FEED, Tabs.CALENDAR, Tabs.TRIP, Tabs.SETTINGS];
 
 // # Tab navigation
 class Navigation extends Component {
+  componentDidMount() {
+    this.props.changeTab(TAB_ORDER[initialTabIndex]);
+  }
+
   @autobind
   onChangeTab({ ref }) {
     this.props.changeTab(ref.props.id);
@@ -38,9 +43,15 @@ class Navigation extends Component {
 
   render() {
     const { navigator, currentTab, profilePicture, showNotificationBadge } = this.props;
+    let page = TAB_ORDER.indexOf(currentTab);
+    if (page < 0) {
+      page = initialTabIndex;
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <ScrollableTabs
+          page={page}
           onChangeTab={this.onChangeTab}
           initialPage={initialTabIndex}
           tabBarPosition={'bottom'}
@@ -74,6 +85,7 @@ class Navigation extends Component {
           />
         </ScrollableTabs>
         <LightBox navigator={navigator} />
+        <PopupInfo navigator={navigator} />
       </View>
     );
   }

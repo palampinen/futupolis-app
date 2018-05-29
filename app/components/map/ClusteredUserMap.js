@@ -17,12 +17,13 @@ import {
   View,
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import ClusteredMapView from 'react-native-maps-super-cluster'
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 import { fromJS } from 'immutable';
 
 import Text from '../Text';
-import { get, random, isEmpty } from 'lodash';
+import { get, has, random, isEmpty } from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MDIcon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '../../services/analytics';
@@ -31,6 +32,8 @@ import HotelInfoPage from '../../containers/HotelInfoPage';
 import SummerVenuePage from '../../containers/SummerVenuePage';
 import DayVenuePage from '../../containers/DayVenuePage';
 
+import EventDetail from '../calendar/EventDetailView';
+import Loader from '../common/Loader';
 import CommentsView from '../comment/CommentsView';
 import PlatformTouchable from '../common/PlatformTouchable';
 import time from '../../utils/time';
@@ -100,14 +103,14 @@ class UserMap extends Component {
     if (selectedCategory && selectedCategory !== nextProps.selectedCategory) {
       const cityCoords = this.getCityCoords(nextProps.selectedCategory);
       if (cityCoords && !isEmpty(cityCoords)) {
-        this.map.animateToCoordinate(cityCoords, 1);
+        this.map.getMapRef().animateToCoordinate(cityCoords, 1);
       }
     }
 
     // Custom callout animation
     if (!selectedMarker && nextProps.selectedMarker) {
       this.animateCallout(true);
-      this.map.animateToCoordinate(nextProps.selectedMarker.toJS().location, 500);
+      this.map.getMapRef().animateToCoordinate(nextProps.selectedMarker.toJS().location, 500);
     } else if (selectedMarker && !nextProps.selectedMarker) {
       this.animateCallout(false);
     }
@@ -115,8 +118,18 @@ class UserMap extends Component {
     // User zoom when locateMe is turned on
     if (locateMe !== nextProps.locateMe && nextProps.locateMe && nextProps.userLocation) {
       // HOX userlocation not immutable
-      this.map.animateToCoordinate(nextProps.userLocation, 400);
+      this.map.getMapRef().animateToCoordinate(nextProps.userLocation, 400);
     }
+  }
+
+  @autobind
+  onEventMarkerPress(event) {
+    this.props.navigator.push({
+      component: EventDetail,
+      name: event.name,
+      model: event,
+      disableTopPadding: true,
+    });
   }
 
   getCityRegion(city) {
@@ -240,6 +253,18 @@ class UserMap extends Component {
     );
   }
 
+  maybeRenderLoading() {
+    if (this.props.loading) {
+      return (
+        <View style={styles.loaderContainer}>
+          <Loader color={theme.white} />
+        </View>
+      );
+    }
+
+    return false;
+  }
+
   @autobind
   onSelectMarker(marker) {
     this.props.selectMarker(marker.id, marker.type);
@@ -335,6 +360,114 @@ class UserMap extends Component {
     return marker && this.props.categories.indexOf(marker.type) >= 0;
   }
 
+  renderMarker = (location, index) => {
+    const { mapMarkers, selectedMarker } = this.props;
+    const isSelectedMarker = selectedMarker && location.id === selectedMarker.get('id');
+    const isMarkerIcon = this.isMarkerIcon(location);
+    const ImageComponent = isSelectedMarker && !isMarkerIcon ? RingLight : Image;
+
+    if (isMarkerIcon) {
+      return null;
+    }
+
+    return <MapView.Marker
+          centerOffset={{ x: 0, y: 0 }}
+          anchor={{ x: 0.5, y: 0.5 }}
+          key={location.id}
+          coordinate={location.location}
+          onPress={() => this.onSelectMarker(location)}
+          style={
+            isSelectedMarker
+              ? { zIndex: 999, opacity: 1 }
+              : { zIndex: parseInt(mapMarkers.size - index), opacity: !!selectedMarker ? 0.6 : 1 }
+          }
+        >
+          <View style={isMarkerIcon ? styles.iconMarker : styles.avatarMarker}>
+            <ImageComponent
+              style={isMarkerIcon ? styles.iconMarkerImage : styles.avatarMarkerImage}
+              source={this.getMarker(location)}
+              width={isMarkerIcon ? 18 : 24}
+              height={isMarkerIcon ? 18 : 24}
+            />
+          </View>
+        </MapView.Marker>
+  }
+
+  renderAvatarMarker = (data, index, total) => {
+
+    if (index > 2) {
+      return null;
+    }
+
+    if (index === 1) {
+      return (
+        <View style={{ zIndex: 998, width: 24, height: 24, borderRadius: 12, backgroundColor: theme.white, position: 'absolute', alignItems: 'center', justifyContent: 'center', left: index * 10}}>
+          <Text style={{ color: theme.orange, fontSize: 11, top: 2, }} bold>+{total - 1}</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={[
+        styles.avatarMarker,
+        { zIndex: 997 - index, width: 24, height: 24, borderRadius: 12, position: 'absolute', left: index * 10 }
+      ]}>
+        <Image
+          style={[
+            styles.avatarMarkerImage,
+            { width: 20, height: 20, borderRadius: 10 }
+          ]}
+          source={this.getMarker(data.properties.item)}
+        />
+      </View>
+    )
+  }
+
+  renderCluster = (cluster, onPress) => {
+    const { pointCount, coordinate, clusterId } = cluster;
+
+    // use pointCount to calculate cluster size scaling
+    // and apply it to "style" prop below
+
+    // eventually get clustered points by using
+    // underlying SuperCluster instance
+    // Methods ref: https://github.com/mapbox/supercluster
+    const clusteringEngine = this.map.getClusteringEngine();
+    const clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
+
+    const avatarPoints = clusteredPoints.filter(point => has(point, 'properties.item.author'));
+
+    console.log(avatarPoints);
+
+    return (
+      <MapView.Marker coordinate={coordinate} onPress={onPress}>
+        <View style={styles.clusterContainer}>
+
+          {avatarPoints.map((p, i) => this.renderAvatarMarker(p, i, avatarPoints.length))}
+
+        </View>
+        {
+          /*
+            Eventually use <Callout /> to
+            show clustered point thumbs, i.e.:
+            <Callout>
+              <ScrollView>
+                {
+                  clusteredPoints.map(p => (
+                    <Image source={p.image}>
+                  ))
+                }
+              </ScrollView>
+            </Callout>
+
+            IMPORTANT: be aware that Marker's onPress event isn't really consistent when using Callout.
+           */
+        }
+      </MapView.Marker>
+    )
+  }
+
+
   render() {
     const { mapMarkers, markerLocations, selectedMarker, selectedCategory, isMapOpen } = this.props;
     const markersJS = mapMarkers.toJS();
@@ -343,6 +476,10 @@ class UserMap extends Component {
       const isSelectedMarker = selectedMarker && location.id === selectedMarker.get('id');
       const isMarkerIcon = this.isMarkerIcon(location);
       const ImageComponent = isSelectedMarker && !isMarkerIcon ? RingLight : Image;
+
+      if (!isMarkerIcon) {
+        return null;
+      }
 
       return (
         <MapView.Marker
@@ -361,8 +498,8 @@ class UserMap extends Component {
             <ImageComponent
               style={isMarkerIcon ? styles.iconMarkerImage : styles.avatarMarkerImage}
               source={this.getMarker(location)}
-              width={isMarkerIcon ? 20 : 24}
-              height={isMarkerIcon ? 20 : 24}
+              width={isMarkerIcon ? 18 : 24}
+              height={isMarkerIcon ? 18 : 24}
             />
           </View>
         </MapView.Marker>
@@ -378,7 +515,7 @@ class UserMap extends Component {
         <View style={styles.mapWrap} delay={400} animationType="fade-in">
           <View style={{ flex: 1 }}>
           {!!selectedCategory &&
-            <MapView
+            <ClusteredMapView
               style={styles.map}
               initialRegion={initialRegion}
               showsUserLocation={this.props.locateMe}
@@ -391,11 +528,17 @@ class UserMap extends Component {
               }}
               customMapStyle={MAP_STYLE}
               provider={PROVIDER_GOOGLE}
+
+              data={markersJS}
+              renderMarker={this.renderMarker}
+              renderCluster={this.renderCluster}
             >
               {markers}
-            </MapView>
+            </ClusteredMapView>
           }
           </View>
+
+          {this.maybeRenderLoading()}
 
           {isMapOpen && <LocateButton onPress={this.onLocatePress} isLocating={this.props.locateMe} />}
 
@@ -427,23 +570,24 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   map: {
+    flex: 1,
     backgroundColor: theme.dark,
-    position: 'absolute',
+    position: 'relative',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   iconMarker: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconMarkerImage: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
   },
   avatarMarker: {
     width: 28,
@@ -574,6 +718,21 @@ const styles = StyleSheet.create({
   markerFilterIcon: {
     color: theme.grey2,
     fontSize: 28,
+  },
+
+  clusterContainer: {
+    flex: 1,
+    width: 50,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.transparent,
+  },
+  clusterText: {
+    top: 2,
+    fontSize: 13,
+    color: theme.orange,
+    textAlign: 'center',
   },
 });
 

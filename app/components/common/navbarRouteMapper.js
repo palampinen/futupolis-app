@@ -65,17 +65,6 @@ let NavigationBarRouteMapper = props => ({
       return <ViewSelector />;
     }
 
-    if (route.actions) {
-      return (
-        <TouchableHighlight
-          onPress={() => {
-            showShareActionSheet(route.post.link);
-          }}
-        >
-          <Icon name="ios-upload-outline" style={styles.navBarIcon} />
-        </TouchableHighlight>
-      );
-    }
     return null;
   },
 
@@ -85,9 +74,6 @@ let NavigationBarRouteMapper = props => ({
     }
     return (
       <View style={styles.navBarLogoWrap}>
-        {/*
-        <Text style={styles.navBarTitle}>FUTUPOLIS</Text>
-        */}
         <Image
           resizeMode={'contain'}
           source={require('../../../assets/futupolis/futupolis-neon.png')}
@@ -121,7 +107,6 @@ var styles = StyleSheet.create({
     top: 8,
     width: 162,
     height: 30,
-    // tintColor: theme.white,
   },
   navBarTitle: {
     fontWeight: 'normal',

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.black,
+    backgroundColor: theme.dark,
   },
   loaderText: {
     color: '#aaa',
@@ -95,8 +95,8 @@ class ProgramDayTabs extends Component {
             tabBarUnderlineColor={theme.blush}
             tabBarBackgroundColor={theme.dark}
             tabBarInactiveTextColor={theme.inactive}
-            locked={IOS}
-            prerenderingSiblingsNumber={0}
+            locked={false}
+            prerenderingSiblingsNumber={1}
             renderTabBar={() => <TabBarItem height={40} />}
           >
             <TimelineList

@@ -19,6 +19,7 @@ import { fetchMarkers as _fetchMarkers } from '../actions/marker';
 import { trackEvent } from '../services/analytics';
 
 import { SET_COMMENTS } from './comments';
+import { DELETE_FEED_ITEM } from '../actions/feed';
 import { isLocating, getShowFilter, getEvents, getEventListState } from '../reducers/event';
 import * as m from '../reducers/marker';
 import api from '../services/api';
@@ -29,10 +30,7 @@ import { BERLIN } from '../constants/Cities';
 import StorageKeys from '../constants/StorageKeys';
 
 // # Constants
-// radius how far from center (office) data should be fetched
-const MAP_QUERY_RADIUS = 20 * 1000; // meters
-const MAP_QUERY_LIMIT = 10;
-const ALL_QUERY_LIMIT = 100;
+const MAP_QUERY_LIMIT = 15;
 const ALL_CATEGORY = 'ALL';
 
 // # Action types
@@ -66,11 +64,10 @@ const getMarkers = createSelector(
   (markers, posts) => {
     const postMarkers = posts.filter(post => post.has('location'));
 
-    return markers.concat(postMarkers);
+    return postMarkers.concat(markers);  // posts on top of markers
+    // return markers.concat(postMarkers); // markers on top of posts
   }
 );
-
-// const postMarkerCategories = ['IMAGE', 'TEXT'];
 
 const getMapMarkers = createSelector(getMarkers, markers =>
   markers.filter(marker => marker.has('location'))
@@ -136,8 +133,19 @@ const SELECT_CATEGORY = 'map/SELECT_CATEGORY';
 
 export const fetchMarkers = _fetchMarkers;
 export const updateShowFilter = _updateShowFilter;
-export const toggleLocateMe = _toggleLocateMe;
-// dispatch(_toggleLocateMe()).then(() => dispatch(fetchUserLocation)
+
+// export const toggleLocateMe = _toggleLocateMe;
+export const toggleLocateMe = () => (dispatch, getState) => {
+  const isLocatingAlready = isLocating(getState());
+
+  // fetch location if locateMe is OFF and will be toggled ON
+  const maybeFetchLocationFirst = isLocatingAlready
+    ? Promise.resolve(null)
+    : Promise.resolve(dispatch(fetchUserLocation()))
+
+  return maybeFetchLocationFirst
+  .then(() => dispatch(_toggleLocateMe()));
+}
 
 export const selectMarker = (markerId, markerType) => ({
   type: SELECT_MARKER,
@@ -157,7 +165,7 @@ export const selectCategory = payload => dispatch => {
   }
 
   return Promise.resolve(dispatch({ type: SELECT_CATEGORY, payload })).then(() =>
-    dispatch(fetchPostsForCity())
+    dispatch(fetchMapPosts())
   );
 };
 
@@ -173,32 +181,16 @@ export const initializeUsersCitySelection = () => (dispatch, getState) =>
       console.log('error when initializing map category');
     });
 
-export const fetchPostsForCity = () => (dispatch, getState) => {
-  const state = getState();
+export const fetchMapPosts = () => (dispatch) => {
 
-  // We are using 'markers' as 'city'
-  // in current data model
-  const cities = m.getMarkers(state);
-  const cityId = getSelectedCategory(state);
+  // Query Params
+  const type = 'IMAGE'; // show only images
+  const sort = SortTypes.SORT_NEW; // sort chronologically
+  const since = moment().subtract(2, 'weeks').toISOString(); // 2 weeks ago
+  const limit = MAP_QUERY_LIMIT; // limit to 30
+  const locationRequired = true;
 
-  const selectedCity = cities.find(city => city.get('type', '').toUpperCase() === cityId);
-
-  // SINCE QUERY
-  let queryParams = {};
-  // request ALL_CATEGORY
-  // if (!selectedCity || !selectedCity.has('location')) {
-  //   queryParams = { limit: ALL_QUERY_LIMIT };
-  // } else {
-  //   const cityLocation = selectedCity.get('location').toJS(); // center for geo-querying posts
-  //   queryParams = { radius: MAP_QUERY_RADIUS, ...cityLocation, limit: MAP_QUERY_LIMIT };
-  // }
-
-  const sort = SortTypes.SORT_NEW; // sort choronologically
-  const since = moment()
-    .subtract(2, 'weeks')
-    .toISOString(); // week ago
-
-  const mapQueryParams = { sort, ...queryParams, since };
+  const mapQueryParams = { sort, since, limit, type, locationRequired };
 
   dispatch({ type: GET_MAP_POSTS_REQUEST });
 
@@ -283,6 +275,17 @@ export default function usermap(state = initialState, action) {
         );
       }
     }
+
+    case DELETE_FEED_ITEM:
+      const originalList = state.get('posts');
+      const itemIndex = originalList.findIndex((item) => item.get('id') === action.item.id);
+
+      if (itemIndex < 0) {
+        console.log('Tried to delete item, but it was not found from state:', itemIndex);
+        return state;
+      } else {
+        return state.set('posts', originalList.delete(itemIndex));
+      }
 
     default: {
       return state;

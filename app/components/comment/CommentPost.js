@@ -8,13 +8,14 @@ import {
   Platform,
   Dimensions,
   Linking,
-  Text,
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { noop } from 'lodash';
-
 import ParsedText from 'react-native-parsed-text';
+
+
+import Text from '../Text';
 import time from '../../utils/time';
 import theme from '../../style/theme';
 import abuse from '../../services/abuse';
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
   commentText: {
     textAlign: 'left',
     color: theme.white,
+    fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
   },
   commentListItemImg: {
     width: width,

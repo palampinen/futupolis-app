@@ -17,7 +17,7 @@ import {
   CLOSE_LIGHTBOX,
   SET_COMMENTS
 } from '../actions/feed';
-import { getUserImages } from '../concepts/user';
+import { getUserImages, getMyImages } from '../concepts/user';
 import { getEventImages } from './event';
 import LoadingStates from '../constants/LoadingStates';
 
@@ -26,8 +26,8 @@ export const getFeed = state => state.feed.get('list') || Immutable.List([]);
 export const getLightBoxItemId = state => state.feed.get('lightBoxItemId', null);
 
 export const getAllPostsInStore = createSelector(
-  getFeed, getUserImages, getEventImages,
-  (feedList, userImages, eventImages) => feedList.concat(userImages, eventImages)
+  getFeed, getUserImages, getMyImages, getEventImages,
+  (feedList, userImages, ownImages, eventImages) => feedList.concat(userImages, ownImages, eventImages)
 );
 
 export const getLightboxItem = createSelector(

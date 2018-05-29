@@ -41,7 +41,7 @@ class UserProfileHero extends Component {
         <ParallaxView
           backgroundSource={solidPattern}
           windowHeight={250}
-          style={{ backgroundColor: theme.darker, shadowOpacity: 0 }}
+          style={{ backgroundColor: theme.dark, shadowOpacity: 0 }}
           scrollableViewStyle={{ shadowColor: theme.transparent }}
           header={
             <View style={styles.header}>
@@ -91,7 +91,7 @@ class UserProfileHero extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.darker,
+    backgroundColor: theme.dark,
   },
   header: {
     flex: 1,

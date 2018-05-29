@@ -11,7 +11,6 @@ import PhotoView from 'react-native-photo-view';
 import ImageZoom from 'react-native-image-zoom';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import ModalBackgroundView from '../common/ModalBackgroundView';
 import PlatformTouchable from '../common/PlatformTouchable';
 import AnimateMe from '../AnimateMe';
 import theme from '../../style/theme';
@@ -25,12 +24,12 @@ const CommentZoomImage = ({ imageUrl, onClose }) => {
   }
 
   return (
-    <ModalBackgroundView style={styles.layer} blurType="light">
+    <View style={styles.layer}>
       <View style={styles.closeButtonWrap}>
         <PlatformTouchable
-          delayPressIn={0}
           onPress={onClose}
           activeOpacity={0.8}
+          delayPressIn={0}
           background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
         >
           <View style={styles.closeButton}>
@@ -60,7 +59,7 @@ const CommentZoomImage = ({ imageUrl, onClose }) => {
           />
         )}
       </AnimateMe>
-    </ModalBackgroundView>
+    </View>
   );
 };
 
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
     width,
     height: height - 60,
     paddingBottom: 0,
-    backgroundColor: IOS ? 'transparent' : 'rgba(255,255,255,.85)',
+    backgroundColor: 'rgba(30,30,30,.85)',
     zIndex: 10,
     position: 'absolute',
     left: 0,

@@ -6,15 +6,12 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  Dimensions,
-  Platform,
   TouchableOpacity,
   ScrollView,
   BackHandler,
   Modal,
 } from 'react-native';
 
-import AppIntro from 'react-native-app-intro';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ModalBox from 'react-native-modalbox';
 
@@ -27,8 +24,7 @@ import SkipView from './SkipView';
 import IntroView from './IntroView';
 import HeartPage from './HeartPage';
 
-const IOS = Platform.OS === 'ios';
-const { width, height } = Dimensions.get('window');
+import { width, height, isIphoneX, IOS } from '../../services/device-info';
 const heartPageShowTime = 5000;
 
 class AppIntroView extends Component {
@@ -69,7 +65,7 @@ class AppIntroView extends Component {
           />
         </View>
 
-        <ScrollView style={{ flex: 1, zIndex: 10 }}>
+        <View style={{ flex: 1, zIndex: 10 }}>
           <View style={[styles.slide, styles.slideIntro]}>
             <View style={styles.topArea}>
               {!showHeartPage && (
@@ -92,67 +88,12 @@ class AppIntroView extends Component {
             />
           </View>
 
-          {/*
-          <AppIntro
-            skipBtnLabel={<Text style={{ fontWeight: '500', fontSize: 18 }}>SKIP</Text>}
-            doneBtnLabel={
-              <Text style={{ fontWeight: '500', fontSize: 18, lineHeight: IOS ? 22 : 32 }}>
-                SKIP
-              </Text>
-            }
-            onSkipBtnClick={this.onClose}
-            onDoneBtnClick={this.onClose}
-            showSkipButton={false}
-            showDoneButton={false}
-            onSlideChange={this.changeSlide}
-            defaultIndex={slideNo}
-            leftTextColor={theme.blue2}
-            rightTextColor={theme.blue2}
-            nextBtnLabel={
-              <Icon name="chevron-right" style={{ lineHeight: IOS ? 40 : 40 }} size={32} />
-            }
-            style={{ backgroundColor: theme.transparent }}
-            dotColor={'rgba(255, 255, 255, .4)'}
-            activeDotColor={theme.white}
-          >
-            <IntroView
-              style={styles.slide}
-              onSelect={this.onSelectCity}
-              cities={this.props.cities}
-            />
-
-
-            <View style={[styles.slide, styles.slideIntro]}>
-              <View style={styles.topArea}>
-                {slideNo === 1 && (
-                  <AnimateMe animationType="scale-fade-in" delay={0} duration={1500}>
-                    <View style={styles.iconWrap}>
-                      <Image
-                        style={[styles.subImage, styles.robotImage]}
-                        source={require('../../../assets/futupolis/robot.png')}
-                      />
-                    </View>
-                  </AnimateMe>
-                )}
-              </View>
-              <View level={-10}>
-                <SkipView
-                  onPressProfileLink={() => {
-                    onClose();
-                    openLoginView();
-                  }}
-                />
-              </View>
-            </View>
-          </AppIntro>
-        */}
-        </ScrollView>
+        </View>
       </ModalBox>
     );
   }
 }
 
-// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
@@ -203,10 +144,10 @@ const styles = StyleSheet.create({
   },
   robotImage: {
     tintColor: theme.orange,
-    top: -10,
+    top: isIphoneX ? -15 : -10,
     marginRight: -8,
     width: width - 200,
-    height: width - 150,
+    height: isIphoneX ? width - 105 :  width - 150,
   },
   icon: {
     // width: 200,

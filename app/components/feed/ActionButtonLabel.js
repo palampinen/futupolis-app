@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, View, Platform, StyleSheet } from 'react-native';
+import { Animated, View, Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import Text from '../Text';
 import theme from '../../style/theme';
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'normal',
     top: 2,
-    color: theme.blue2,
+    color: theme.dark,
   },
   additionalLabelText: {
     color: '#bbb',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 class ActionButtonLabel extends Component {
   render() {
     const combinedStyle = [styles.label];
-    const { extraStyle, children, additionalLabel } = this.props;
+    const { extraStyle, children, additionalLabel, onPress } = this.props;
 
     if (extraStyle) {
       combinedStyle.push(extraStyle);
@@ -44,8 +44,9 @@ class ActionButtonLabel extends Component {
 
     return (
       <Animated.View style={combinedStyle}>
-        <Text style={styles.labelText}>{children}</Text>
-        <Text style={styles.additionalLabelText}>{additionalLabel}p</Text>
+        <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
+          <Text style={styles.labelText}>{children}</Text>
+        </TouchableOpacity>
       </Animated.View>
     );
   }

@@ -78,7 +78,8 @@ class UserView extends Component {
                           height: width / 3 - 5,
                           width: width / 3 - 5,
                           margin: 2,
-                          backgroundColor: theme.stable,
+                          backgroundColor: theme.darker,
+                          borderRadius: 3,
                         }}
                         source={{ uri: image.get('url') }}
                       />

@@ -9,14 +9,12 @@ import {
   RefreshControl,
   View,
   ScrollView,
-  Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 import LinearGradient from 'react-native-linear-gradient';
 
-import theme from '../../style/theme';
 import {
   fetchFeed,
   refreshFeed,
@@ -24,14 +22,13 @@ import {
   removeFeedItem,
   voteFeedItem,
 } from '../../actions/feed';
-
 import { openLightBox } from '../../concepts/lightbox';
 import { openComments, closeComments } from '../../concepts/comments';
 import { fetchUserImages } from '../../concepts/user';
-
 import { openRegistrationView, getUserTeam } from '../../concepts/registration';
 import permissions from '../../services/android-permissions';
-
+import { IOS, height } from '../../services/device-info';
+import ImageCaptureOptions from '../../constants/ImageCaptureOptions';
 
 import Text from '../Text';
 import ImageEditor from './ImageEditor';
@@ -43,9 +40,7 @@ import Loading from './Loading';
 import ActionButtons from './ActionButtons';
 import LoadingStates from '../../constants/LoadingStates';
 
-import ImageCaptureOptions from '../../constants/ImageCaptureOptions';
-
-const IOS = Platform.OS === 'ios';
+import theme from '../../style/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -137,11 +132,6 @@ class FeedList extends Component {
   }
 
   @autobind
-  onRefreshFeed() {
-    this.props.refreshFeed();
-  }
-
-  @autobind
   onLoadMoreItems() {
     const { isRefreshing, feed } = this.props;
     if (isRefreshing || !feed.size || feed.size < 10) {
@@ -186,44 +176,46 @@ class FeedList extends Component {
       <View style={styles.feedContainer}>
         <View style={styles.listView}>
           <FeedListItem item={item} />
-          <FeedListItem item={item} />
-          <FeedListItem item={item} />
+          <FeedListItem item={item} opacity={0.7} />
+          <FeedListItem item={item} opacity={0.4} />
         </View>
       </View>
     );
   }
 
   @autobind
-  renderFeed(feedListState, isLoadingActionTypes, isLoadingUserData) {
-    const refreshControl = (
-      <RefreshControl
-        refreshing={this.props.isRefreshing || this.props.isSending}
-        onRefresh={this.onRefreshFeed}
-        colors={[theme.blush]}
-        tintColor={theme.blush}
+  renderFeed() {
+    const { feedListState, isLoadingActionTypes, isLoadingUserData, isRefreshing, isSending } = this.props;
+
+    const refreshControl = <RefreshControl
+        refreshing={isRefreshing || isSending}
+        onRefresh={this.props.refreshFeed}
+        colors={[theme.white]}
+        tintColor={theme.white}
         progressBackgroundColor={theme.light}
       />
-    );
 
     const isLoading = isLoadingActionTypes || isLoadingUserData;
 
     switch (feedListState) {
       case LoadingStates.LOADING:
         return this.renderSkeletonState();
-      // return <Loading />;
       case LoadingStates.FAILED:
         return (
-          <ScrollView style={{ flex: 1 }} refreshControl={refreshControl}>
-            <Text style={{ marginTop: 20, textAlign: 'center', padding: 30, color: theme.inactive }}>
-              Could not get feed...
-            </Text>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', height }}
+            refreshControl={refreshControl}
+          >
+              <Text style={{ marginTop: 20, textAlign: 'center', padding: 30, color: theme.inactive }}>
+                Could not get feed...
+              </Text>
           </ScrollView>
         );
       default:
         return (
           <View style={styles.feedContainer}>
             <ListView
-              // ref="_scrollView"
               ref={this.props.setRef}
               dataSource={this.state.dataSource}
               showsVerticalScrollIndicator={false}
@@ -231,15 +223,16 @@ class FeedList extends Component {
                 item.mapLink
                 ?
                 <TouchableWithoutFeedback onPress={this.props.onMapItemPress}>
-                <LinearGradient
-                  locations={[0, 0.5, 0.9]}
-                  colors={['rgba(51,50,56,.001)', 'rgba(51,50,56,.4)', theme.dark]}
-                  style={{
-                    height: 150,
-                  }}
-                />
+                  <LinearGradient
+                    locations={[0, 0.5, 0.9]}
+                    colors={['rgba(51,50,56,.001)', 'rgba(51,50,56,.4)', theme.dark]}
+                    style={{
+                      height: 150,
+                    }}
+                  />
                 </TouchableWithoutFeedback>
-                : <FeedListItem
+                :
+                <FeedListItem
                   item={item}
                   key={item.id}
                   userTeam={this.props.userTeam}
@@ -267,33 +260,7 @@ class FeedList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderFeed(
-          this.props.feedListState,
-          this.props.isLoadingActionTypes,
-          this.props.isLoadingUserData
-        )}
-
-        {/*
-        <ActionButtons
-          visibilityAnimation={this.state.actionButtonsAnimation}
-          isRegistrationInfoValid={this.props.isRegistrationInfoValid}
-          style={styles.actionButtons}
-          isLoading={this.props.isLoadingActionTypes || this.props.isLoadingUserData}
-          onPressAction={this.onPressAction}
-          onScrollTop={this.scrollTop}
-          showScrollTopButton={this.state.showScrollTopButton}
-        />
-
-        <Notification visible={this.props.isNotificationVisible}>
-          {this.props.notificationText}
-        </Notification>
-        <ImageEditor
-          onCancel={this.resetPostImage}
-          onImagePost={this.onImagePost}
-          animationType={'fade'}
-          image={this.props.editableImage}
-        />
-      */}
+        {this.renderFeed()}
       </View>
     );
   }

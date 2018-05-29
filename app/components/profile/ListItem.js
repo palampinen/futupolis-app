@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   Linking,
   Image,
-  Dimensions,
-  Platform,
 } from 'react-native';
 import autobind from 'autobind-decorator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -21,9 +19,7 @@ import WebViewer from '../webview/WebViewer';
 import AnimateMe from '../AnimateMe';
 import PlatformTouchable from '../common/PlatformTouchable';
 import theme from '../../style/theme';
-
-const { width, height } = Dimensions.get('window');
-const IOS = Platform.OS === 'ios';
+import { IOS, isIphoneX, width, height } from '../../services/device-info';
 
 const getSubIcon = mainIcon => {
   let name;
@@ -106,11 +102,9 @@ class ListItem extends Component {
       linkItemStyles.push(styles.listItemSeparator);
     }
 
-
     if (item.plain) {
       linkItemStyles.push(styles.plainItem);
     }
-
 
     if (item.last) {
       linkItemStyles.push(styles.listItemLast);
@@ -142,7 +136,6 @@ class ListItem extends Component {
             colors={['rgba(70,70,70,0.2)', theme.dark, theme.dark]}
             style={styles.listItem}
           >
-
           <View style={styles.listItemIcons}>
             {animated && subIcon.name &&
               <IconComponent style={styles.subIconWrap} animationType={subIcon.animation} duration={2500}>
@@ -152,7 +145,6 @@ class ListItem extends Component {
             <IconComponent style={styles.listItemIconWrap} animationType={item.icon} duration={2500}>
               <Icon style={styles.listItemIcon} name={item.icon} />
             </IconComponent>
-
           </View>
 
             <View style={styles.listItemTitles}>
@@ -171,10 +163,14 @@ class ListItem extends Component {
     const linkItemStyles = [styles.listItemButton];
     const { navigator } = this.props;
     const { component, title } = item;
+    const { animated } = this.state;
 
     if (item.separatorAfter || item.last) {
       linkItemStyles.push(styles.listItemSeparator);
     }
+
+    const IconComponent = animated ? AnimateMe : View;
+    const subIcon = getSubIcon(item.icon)
 
     return (
       <PlatformTouchable
@@ -186,18 +182,29 @@ class ListItem extends Component {
         onPress={() => navigator.push({ name: title, component, showName: true })}
       >
         <View style={linkItemStyles}>
-          <View style={styles.listItem}>
+          <LinearGradient
+            locations={[0, 0.5, 0.9]}
+            start={{ x: 0.1, y: 0.1 }}
+            end={{ x: 0.6, y: 0.9 }}
+            colors={['rgba(70,70,70,0.2)', theme.dark, theme.dark]}
+            style={styles.listItem}
+          >
             <View style={styles.listItemIcons}>
-              <View style={styles.listItemIconWrap}>
+              {animated && subIcon.name &&
+                <IconComponent style={styles.subIconWrap} animationType={subIcon.animation} duration={2500}>
+                  <IonIcon name={subIcon.name} style={styles.subIcon} />
+                </IconComponent>
+              }
+              <IconComponent style={styles.listItemIconWrap} animationType={item.icon} duration={2500}>
                 <Icon style={styles.listItemIcon} name={item.icon} />
-              </View>
+              </IconComponent>
             </View>
             <View style={styles.listItemTitles}>
               <Text style={styles.listItemText}>{item.title}</Text>
               {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
             </View>
             {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
-          </View>
+          </LinearGradient>
         </View>
       </PlatformTouchable>
     );
@@ -285,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: IOS ? theme.transparent : theme.dark,
     padding: 0,
     width: (width / 2) - 9,
-    minHeight: (height-172) / 2,
+    minHeight: isIphoneX ? (height-196) / 2 : (height-172) / 2,
     margin: 3,
     marginBottom: 0,
     borderRadius: 5,

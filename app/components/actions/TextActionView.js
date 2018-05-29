@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 
 import {
   View,
-  Text,
   TextInput,
   Platform,
   Dimensions,
@@ -15,10 +14,11 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Button from '../../components/common/Button';
 import theme from '../../style/theme';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Text from '../Text';
 
 import { postText, closeTextActionView } from '../../actions/competition';
 
@@ -146,14 +146,6 @@ class TextActionView extends Component {
                 value={this.state.text}
               />
 
-              {/*
-            <View style={styles.bottomInfo}>
-              <Text style={styles.bottomInfoText}>
-                How is it going?
-              </Text>
-            </View>
-          */}
-
               <View style={styles.bottomButtons}>
                 <Button
                   onPress={this.onSendText}
@@ -248,6 +240,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     height: 220,
     width: width - 40,
+    fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
   },
   bottomInfo: {
     padding: 15,

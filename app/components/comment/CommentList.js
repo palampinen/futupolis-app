@@ -25,9 +25,7 @@ const insertText = (str, index, indexEnd, value) =>
 class CommentList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      zoomedImage: null,
-    };
+    this.state = { zoomedImage: null };
   }
 
   @autobind

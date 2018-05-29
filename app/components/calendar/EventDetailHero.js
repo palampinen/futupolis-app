@@ -10,6 +10,7 @@ import {
   Text,
   View
 } from 'react-native';
+import moment from 'moment';
 
 //import Icon from 'react-native-vector-icons/Ionicons';
 import time from '../../utils/time';
@@ -126,7 +127,7 @@ export default class EventDetailHero extends Component {
           <View style={styles.gridListItemMeta}>
             <View style={styles.gridListItemMeta__block}>
               <Text style={styles.gridListItemTime}>{timepoint.date}</Text>
-              <Text style={styles.gridListItemTime}>{timepoint.time} - {timepoint.endTime}</Text>
+              <Text style={styles.gridListItemTime}>{moment(item.startTime).format('HH:mm')} - {moment(item.endTime).format('HH:mm')}</Text>
             </View>
 
             <View style={styles.gridListItemMeta__block}>
@@ -136,15 +137,6 @@ export default class EventDetailHero extends Component {
               </View>}
             </View>
           </View>
-          {/*
-
-          <View style={styles.gridListItemIconsWrapper}>
-            {item.teemu && <Text style={styles.gridListItemIcon}>
-              <Icon name='university' size={15} /> Emäteemu!</Text>}
-            {timepoint.onGoing && <Text style={styles.gridListItemIcon}>Käynnissä ny!</Text>}
-            {timepoint.startsSoon && <Text style={styles.gridListItemIcon}>Alkaa kohta!</Text>}
-          </View>
-          */}
       </View>;
   }
 }

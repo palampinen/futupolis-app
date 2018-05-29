@@ -6,19 +6,19 @@ import {
   Alert,
   Image,
   StyleSheet,
-  Dimensions,
-  Platform,
   PropTypes,
   TouchableOpacity,
   View,
   Linking,
 } from 'react-native';
+import autobind from 'autobind-decorator';
 
 import { isEmpty, get } from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { connect } from 'react-redux';
 import abuse from '../../services/abuse';
+import { IOS, isIphoneX, width } from '../../services/device-info';
 import time from '../../utils/time';
 import theme from '../../style/theme';
 
@@ -30,11 +30,9 @@ import MapLink from './MapLink';
 import RingLightImage from '../RingLight';
 
 
-const { width } = Dimensions.get('window');
 const FEED_ITEM_MARGIN_DISTANCE = 0;
 const FEED_ITEM_MARGIN_DEFAULT = 0;
 const FEED_ADMIN_ITEM_MARGIN_DEFAULT = 15;
-const IOS = Platform.OS === 'ios';
 const placeholderSpeakerImage = require('../../../assets/futupolis/avatar--robot.png');
 
 const styles = StyleSheet.create({
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
     width,
     flex: 1,
     backgroundColor: theme.darker,
-    paddingBottom: 10,
+    paddingBottom: 20,
     paddingTop: 0,
   },
   itemTouchable: {
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.dark,
   },
   itemContent_selected: {
-    backgroundColor: theme.stable,
+    backgroundColor: theme.darker,
   },
   itemContent_byMyTeam: {
     marginRight: FEED_ITEM_MARGIN_DEFAULT,
@@ -238,11 +236,11 @@ const styles = StyleSheet.create({
   // # Skeleton styles
   skeletonWrap: {
     flex: 1,
-    minHeight: 193,
+    minHeight: 200,
   },
   skeletonHeader: {
     minHeight: 50,
-    paddingTop: 15,
+    paddingTop: 10,
     justifyContent: 'center',
   },
   skeletonAvatar: {
@@ -276,9 +274,9 @@ const styles = StyleSheet.create({
   },
   skeletonFooterItem: {
     backgroundColor: theme.greyish,
-    width: 60,
     height: 16,
-    margin: 10,
+    width: 100,
+    marginBottom: isIphoneX ? 20 : 15,
     marginHorizontal: 15,
   },
 });
@@ -415,10 +413,11 @@ class FeedListItem extends Component {
     );
   }
 
+  @autobind
   renderSkeletonItem() {
     return (
       <View style={[styles.itemWrapper, styles.skeletonWrap]}>
-        <View style={styles.itemTouchable}>
+        <View style={[styles.itemTouchable, { opacity: this.props.opacity || 1}]}>
           <View style={styles.itemContent}>
             <View style={[styles.feedItemListItemInfo, styles.skeletonHeader]}>
               <View style={styles.skeletonAvatar} />
@@ -434,8 +433,6 @@ class FeedListItem extends Component {
             </View>
 
             <View style={styles.footer}>
-              <View style={styles.skeletonFooterItem} />
-              <View style={styles.skeletonFooterItem} />
               <View style={styles.skeletonFooterItem} />
             </View>
           </View>

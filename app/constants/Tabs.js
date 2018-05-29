@@ -6,6 +6,7 @@ export default {
   TRIP: 'TRIP',
   ACTION: 'ACTION',
   NOTIFICATIONS: 'NOTIFICATIONS',
+  INFO: 'INFO',
   FEED: 'FEED',
   SETTINGS: 'SETTINGS',
 };

@@ -71,6 +71,14 @@ const getAnimationStyles = (type, animation) => {
       };
     }
 
+    case 'new-notification': {
+      return {
+        transform: [
+          { translateY: animation.interpolate({ inputRange: [0, 1], outputRange: [-1, 2] }) },
+        ],
+      };
+    }
+
     case 'slide-from-bottom': {
       return {
         transform: [

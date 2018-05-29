@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 const Loader = props => (
   <ActivityIndicator
-    color={props.color || theme.primary}
+    color={props.color || theme.orange}
     animating={true}
     style={styles.activityIndicator}
     size={props.size || 'small'} />

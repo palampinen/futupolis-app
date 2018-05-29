@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   navigator: {
     paddingTop: 20,
     paddingBottom: 0,
-    backgroundColor: theme.black,
+    backgroundColor: theme.dark,
   },
 });
 

@@ -1,6 +1,7 @@
 'use strict';
 import { List, fromJS } from 'immutable';
 import { createSelector } from 'reselect';
+import { castArray, filter, keyBy } from 'lodash';
 
 import {
   SET_MARKER_LIST,
@@ -22,13 +23,22 @@ export const getMarkers = createSelector(
   }))
 );
 
+export const getMarkersByType = types => createSelector(getMarkers, markers => {
+  const filterTypes = castArray(types);
+  const markerArray = markers.toJS();
+
+  const filteredMarkers = filter(markerArray, m => filterTypes.includes(m.type));
+
+  return fromJS(keyBy(filteredMarkers, 'type'));
+});
+
 
 const initialState = fromJS({
   list: [],
   listState: 'none'
 });
 
-export default function event(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_MARKER_LIST:
       return state.set('list', fromJS(action.payload));

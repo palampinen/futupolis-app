@@ -86,7 +86,7 @@ class ViewSelector extends Component {
 
 var styles = StyleSheet.create({
   sortSelector: {
-    top: 0,
+    top: 1,
     paddingTop: 15,
     paddingBottom: 8,
     paddingRight: 25,

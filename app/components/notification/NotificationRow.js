@@ -36,11 +36,11 @@ const Conversation = ({ item, last, showDelay, onPress }) => {
 
           <View style={[styles.contentCol, last ? styles.last : {}]}>
             <View style={styles.content}>
+
+              <View style={{ flex: 1, paddingRight: 50 }}>
               <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.textMessage}>
                 {item.get('title')}
               </Text>
-
-              <View style={{ flex: 1, paddingRight: 50 }}>
                 <Text
                   numberOfLines={2}
                   ellipsizeMode={'tail'}
@@ -48,7 +48,7 @@ const Conversation = ({ item, last, showDelay, onPress }) => {
                 >
                   {item.get('message')}
                 </Text>
-                <View style={{ position: 'absolute', right: 0, top: 2 }}>
+                <View style={{ position: 'absolute', right: 0, top: 0 }}>
                   <Text style={[styles.textMessage, styles.commentMessage, { textAlign: 'right' }]}>
                     {time.getTimeAgo(item.get('timestamp'))}
                   </Text>

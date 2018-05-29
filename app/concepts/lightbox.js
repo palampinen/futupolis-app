@@ -21,8 +21,6 @@ export const getLightboxItem = createSelector(
       return Map();
     }
 
-    console.log(allPosts.toJS());
-
     return allPosts.find(item => toString(item.get('id', '')) === toString(id));
   }
 );

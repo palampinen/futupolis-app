@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -16,6 +16,7 @@ import { getCurrentTab } from '../../reducers/navigation';
 import AnimateMe from '../AnimateMe';
 import theme from '../../style/theme';
 import Loader from '../common/Loader';
+import Text from '../Text';
 import { width, IOS } from '../../services/device-info';
 
 class UserView extends Component {
@@ -23,12 +24,12 @@ class UserView extends Component {
     this.props.fetchMyImages();
   }
 
-  componentWillReceiveProps({ tab }) {
-    // Fetch on Settings tab
-    if (tab !== this.props.tab && tab === 'SETTINGS') {
-      this.props.fetchMyImages();
-    }
-  }
+  // componentWillReceiveProps({ tab }) {
+  //   // Fetch on Settings tab
+  //   if (tab !== this.props.tab && tab === 'SETTINGS') {
+  //     this.props.fetchMyImages();
+  //   }
+  // }
 
   render() {
     const { images, isLoading, userName } = this.props;

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     lineHeight: IOS ? 20 : 22,
   },
   url: {
-    color: theme.blush,
+    textDecorationLine: 'underline'
   },
 });
 

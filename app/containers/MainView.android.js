@@ -12,7 +12,6 @@ import { isLoadingAppAuth } from '../concepts/auth';
 import AndroidTabNavigation from './Navigation';
 import RegistrationView from '../components/registration/RegistrationView';
 import TextActionView from '../components/actions/TextActionView';
-import LightBox from '../components/lightbox/Lightbox';
 import errorAlert from '../utils/error-alert';
 
 const theme = require('../style/theme');
@@ -39,7 +38,7 @@ class MainView extends Component {
     const immutableError = this.props.errors.get('error');
     if (immutableError) {
       const error = immutableError.toJS();
-      errorAlert(this.props.dispatch, _.get(error, 'header'), _.get(error, 'message'));
+      return errorAlert(this.props.dispatch, _.get(error, 'header'), _.get(error, 'message'));
     }
 
     const { isUserLogged, isLoginLoading } = this.props;
@@ -56,14 +55,13 @@ class MainView extends Component {
         <Navigator
           initialRoute={{
             component: AndroidTabNavigation,
-            name: 'Futubohemia',
+            name: 'Futupolis',
           }}
           renderScene={this.renderScene}
           configureScene={() => ({
             ...Navigator.SceneConfigs.FloatFromBottomAndroid,
           })}
         />
-        <LightBox />
         <TextActionView />
       </View>
     );

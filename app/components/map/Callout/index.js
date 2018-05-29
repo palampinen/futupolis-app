@@ -38,11 +38,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Callout = ({ itemId, imageUrl, onImagePress, children }) => {
+const Callout = ({ imageUrl, onImagePress, children }) => {
   return (
     <View style={styles.calloutContent}>
       <View style={styles.calloutImage}>
-        <TouchableOpacity onPress={() => onImagePress(itemId)} activeOpacity={0.9}>
+        <TouchableOpacity onPress={onImagePress} activeOpacity={0.9}>
           <Image style={styles.postImage} source={{ uri: imageUrl }} />
         </TouchableOpacity>
       </View>

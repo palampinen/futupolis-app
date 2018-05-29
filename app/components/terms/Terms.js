@@ -10,8 +10,9 @@ const isIOS = Platform.OS === 'ios';
 
 class Terms extends Component {
   render() {
+    const backgroundColor = this.props.backgroundColor || theme.dark;
     return (
-      <View style={{ flex: 1, backgroundColor: theme.dark }}>
+      <View style={{ flex: 1, backgroundColor }}>
         {!isIOS && (
           <Header
             backgroundColor={theme.secondary}
@@ -193,7 +194,7 @@ class Terms extends Component {
             </Text>
             <Text style={styles.paragraph}>
               If you have any questions about these Terms, please contact us via email
-              futupolis@futurice.com. Postal address: Kelloportinkatu 1 D, 33100 Tampere.
+              futupolisapp@gmail.com. Postal address: Kelloportinkatu 1 D, 33100 Tampere.
             </Text>
           </View>
         </ScrollView>
@@ -205,7 +206,7 @@ class Terms extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.dark,
+    backgroundColor: theme.transparent,
   },
   content: {
     padding: isIOS ? 15 : 20,

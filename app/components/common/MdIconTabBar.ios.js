@@ -46,12 +46,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'transparent',
-    bottom: isIphoneX ? 3 : 5,
+    bottom: isIphoneX ? 0 : 5,
   },
   image: {
     width: 22,
     height: 22,
     borderRadius: 11,
+    marginTop: isIphoneX ? 1 : 0,
   },
   badge: {
     position: 'absolute',
@@ -63,6 +64,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.blush,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  icon: {
+    marginTop: isIphoneX ? 2 : 0,
   },
   badgeText: {
     top: 2,
@@ -134,10 +138,12 @@ class MdIconTabBar extends Component {
       <AnimatedIcon
         name={item.icon}
         size={item.iconSize || defaultIconSize}
-        style={{
-          bottom: buttonAnimation.interpolate({ inputRange: [0, 1], outputRange: [0, 7] }),
-          color: isTabActive ? activeTextColor : inactiveTextColor,
-        }}
+        style={[styles.icon,
+          {
+            bottom: buttonAnimation.interpolate({ inputRange: [0, 1], outputRange: [0, 7] }),
+            color: isTabActive ? activeTextColor : inactiveTextColor,
+          }
+        ]}
       />
     );
   }

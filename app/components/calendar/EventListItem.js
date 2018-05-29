@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
+import moment from 'moment';
 
 import Text from '../Text';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -154,8 +155,8 @@ export default class EventListItem extends Component {
             </Text>
             <View style={styles.gridListItemMeta}>
               <Text style={styles.gridListItemTime}>
-                {/*pastEvent && `${timepoint.date} `*/}
-                {timepoint.time} - {timepoint.endTime}
+                {/*timepoint.time} - {timepoint.endTime*/}
+                {moment(item.startTime).format('HH:mm')} - {moment(item.endTime).format('HH:mm')}
               </Text>
               <Text style={styles.gridListItemPlace}>{item.locationName}</Text>
             </View>

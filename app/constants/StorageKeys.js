@@ -6,6 +6,7 @@ const tokenKeys = {
   mapCategory: `${APP_STORAGE_KEY}:mapCategory`,
   loginInProgress: `${APP_STORAGE_KEY}:loginInProgress`,
   notificationsLastChecked: `${APP_STORAGE_KEY}:notificationsLastChecked`,
+  lastNotificationId: `${APP_STORAGE_KEY}:lastNotificationId`,
 };
 
 export default tokenKeys;

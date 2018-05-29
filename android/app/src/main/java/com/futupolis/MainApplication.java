@@ -8,7 +8,6 @@ import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import cl.json.RNSharePackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -19,6 +18,8 @@ import com.auth0.react.A0Auth0Package;
 import org.gamega.RNAsyncStoragePackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; 
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -45,7 +46,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNAsyncStoragePackage(),
             new VectorIconsPackage(),
             new RNSharePackage(),
-            new ReactNativePushNotificationPackage(),
             new PhotoViewPackage(),
             new MapsPackage(),
             new LinearGradientPackage(),
@@ -55,7 +55,9 @@ public class MainApplication extends Application implements ReactApplication {
             new RNDeviceInfo(),
             new BlurViewPackage(),
             new A0Auth0Package(),
-            new RNFirebaseDatabasePackage()
+            new RNFirebaseDatabasePackage(),
+            new RNFirebaseNotificationsPackage(),
+            new RNFirebaseMessagingPackage()
       );
     }
 

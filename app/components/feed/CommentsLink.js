@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { isFunction } from 'lodash';
-import { View, StyleSheet, Platform, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MDIcon from 'react-native-vector-icons/Entypo';
+import Text from '../Text';
 
 import theme from '../../style/theme';
 
@@ -27,6 +28,7 @@ class CommentsLinks extends Component {
             <Text
               style={[
                 styles.commentText,
+                { top: IOS ? 4 : 0 },
                 compact && styles.compactText,
                 reverse && { marginLeft: 7 },
               ]}

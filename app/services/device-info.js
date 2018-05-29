@@ -13,3 +13,4 @@ export const isIpad = aspectRatio <= 1.6;
 // Iphone X
 export const isIphoneX = _isIphoneX();
 
+export const isSmall = !isIphoneX && width <= 320;

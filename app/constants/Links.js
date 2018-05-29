@@ -1,15 +1,11 @@
 import UserView from '../components/user/UserView';
 import TermsView from '../components/terms/Terms';
+import HotelInfoPage from '../containers/HotelInfoPage';
+import VenueInfoPage from '../containers/VenueInfoPage';
 
 const ROOT_URL = 'https://futurice.github.io/futupolis-web/app';
 
 const links = [
-  // {
-  //   title: 'My Berlin Photos',
-  //   icon: 'photo-library',
-  //   component: UserView,
-  //   subtitle: 'All photos during trip',
-  // },
   {
     title: 'Flight info',
     subtitle: 'When does my flight leave?',
@@ -27,22 +23,14 @@ const links = [
   {
     title: 'Hotel info',
     subtitle: 'Where are we staying?',
-    link: `https://futurice.github.io/futupolis-web/app/hotel.html`,
+    component: HotelInfoPage,
     icon: 'hotel',
     separatorAfter: false,
     showInWebview: true,
   },
-  // {
-  //   title: 'Roommates',
-  //   subtitle: 'Who am I sharing room with?',
-  //   link: `https://docs.google.com/spreadsheets/d/1QkvQoJIm4nGM_XPSXsd3exFB131NNOE9MPfjAgMLTbQ/edit`,
-  //   icon: 'hotel',
-  //   separatorAfter: false,
-  //   showInWebview: false,
-  // },
   {
     title: 'Venues',
-    link: 'https://futurice.github.io/futupolis-web/app/venues.html',
+    component: VenueInfoPage,
     subtitle: 'Where are the main events?',
     icon: 'location-city',
     separatorAfter: false,
@@ -51,8 +39,8 @@ const links = [
 ];
 
 const terms = [
-  { title: 'Feedback', mailto: 'futubohemia@futurice.com', icon: 'send' },
-  // { title: 'Feedback', mailto: 'futubohemia@futurice.com', subtitle: 'How could we do this better?', icon: 'send' },
+  { title: 'Feedback', mailto: 'futupolisapp@gmail.com', icon: 'send' },
+  { title: 'Website', link: 'https://futupolis.com', icon: 'link', showInWebview: false },
   {
     title: 'Terms of Service',
     link: `${ROOT_URL}/terms.html`,

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View, Linking, Platform } from 'react-native';
 import MDIcon from 'react-native-vector-icons/MaterialIcons';
+import ParsedText from 'react-native-parsed-text';
+
 
 import Text from '../../Text';
 import Button from '../../common/Button';
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.stable,
     backgroundColor: theme.transparent,
+    fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
   },
   calloutButton: {
     top: 0,
@@ -40,6 +43,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  url: {
+    fontSize: 0,
+    opacity: 0,
+  }
 });
 
 const onDirectionsPress = model => {
@@ -49,17 +56,23 @@ const onDirectionsPress = model => {
   Linking.openURL(geoUrl);
 };
 
-const CalloutPost = ({ item }) => {
+const CalloutPost = ({ item, onImagePress }) => {
   return (
-    <Callout itemId={item.get('id')} imageUrl={item.get('imageUrl')}>
+    <Callout imageUrl={item.get('imageUrl')} onImagePress={onImagePress}>
       <View style={styles.postInfo}>
         <Text style={styles.postAuthorName}>{item.get('title')}</Text>
-        <Text style={styles.postTextMessage}>{item.get('subtitle')}</Text>
-        {IOS && (
+        <ParsedText
+          style={styles.postTextMessage}
+          parse={[{ type: 'url', style: styles.url }]}
+          numberOfLines={5}
+        >
+          {item.get('subtitle')}
+        </ParsedText>
+        {/*IOS && (
           <Button style={styles.calloutButton} onPress={() => onDirectionsPress(item)}>
             Directions
           </Button>
-        )}
+        )*/}
       </View>
     </Callout>
   );

@@ -23,6 +23,7 @@ import Share from 'react-native-share';
 import PhotoView from 'react-native-photo-view';
 import ImageZoom from 'react-native-image-zoom';
 import theme from '../../style/theme';
+import time from '../../utils/time';
 import { isIphoneX, width, height, IOS } from '../../services/device-info';
 
 class LightBox extends Component {
@@ -138,7 +139,8 @@ class LightBox extends Component {
     const itemImage = lightBoxItem.get('url');
     const itemAuthor = lightBoxItem.getIn(['author', 'name']);
     const isSystemUser = lightBoxItem.getIn(['author', 'type'], '') === 'SYSTEM';
-    const created = moment(lightBoxItem.get('createdAt', ''));
+    const createdAt = lightBoxItem.get('createdAt', '');
+    const itemText = lightBoxItem.get('text');
 
     return (
       <Modal
@@ -207,7 +209,7 @@ class LightBox extends Component {
                 )}
                 <View style={styles.date}>
                   <Text style={styles.dateText}>
-                    {created.format('ddd DD.MM.YYYY')} at {created.format('HH:mm')}
+                    {time.formatActionTime(createdAt)}
                   </Text>
                 </View>
               </View>
@@ -215,41 +217,48 @@ class LightBox extends Component {
           </View>
 
           <View style={styles.toolbar}>
+            {!!itemText &&
             <View>
-              <VotePanel
-                item={lightBoxItem.toJS()}
-                voteFeedItem={this.props.voteFeedItem}
-                openRegistrationView={this.props.openRegistrationView}
-              />
+              <Text style={styles.imageCaptionText}>{itemText}</Text>
             </View>
+            }
+            <View style={styles.toolbarRow}>
+              <View>
+                <VotePanel
+                  item={lightBoxItem.toJS()}
+                  voteFeedItem={this.props.voteFeedItem}
+                  openRegistrationView={this.props.openRegistrationView}
+                />
+              </View>
 
-            <View>
-              <CommentsLink
-                parentId={lightBoxItem.get('id')}
-                commentCount={lightBoxItem.get('commentCount')}
-                openComments={this.openPostComments}
-                reverse
-              />
-            </View>
+              <View>
+                <CommentsLink
+                  parentId={lightBoxItem.get('id')}
+                  commentCount={lightBoxItem.get('commentCount')}
+                  openComments={this.openPostComments}
+                  reverse
+                />
+              </View>
 
-            {!isSystemUser && (
-              <PlatformTouchable
-                onPress={() => this.showRemoveDialog(lightBoxItem)}
-                activeOpacity={0.8}
-              >
+              {!isSystemUser && (
+                <PlatformTouchable
+                  onPress={() => this.showRemoveDialog(lightBoxItem)}
+                  activeOpacity={0.8}
+                >
+                  <View style={styles.toolbar__button}>
+                    <Icon
+                      style={styles.toolbar__icon}
+                      name={this.itemIsCreatedByMe(lightBoxItem) ? 'delete' : 'flag'}
+                    />
+                  </View>
+                </PlatformTouchable>
+              )}
+              <PlatformTouchable onPress={this.onShare.bind(this, itemImage)} activeOpacity={0.8}>
                 <View style={styles.toolbar__button}>
-                  <Icon
-                    style={styles.toolbar__icon}
-                    name={this.itemIsCreatedByMe(lightBoxItem) ? 'delete' : 'flag'}
-                  />
+                  <Icon style={styles.toolbar__icon} name="share" />
                 </View>
               </PlatformTouchable>
-            )}
-            <PlatformTouchable onPress={this.onShare.bind(this, itemImage)} activeOpacity={0.8}>
-              <View style={styles.toolbar__button}>
-                <Icon style={styles.toolbar__icon} name="share" />
-              </View>
-            </PlatformTouchable>
+            </View>
           </View>
         </ModalBackgroundView>
       </Modal>
@@ -310,7 +319,6 @@ const styles = StyleSheet.create({
   },
   headerTitleText: {
     color: theme.white,
-    fontWeight: 'bold',
     fontSize: 14,
   },
   date: {
@@ -321,22 +329,37 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     fontSize: 12,
   },
+  imageCaptionText: {
+    color: theme.white,
+    padding: 20,
+    paddingTop: 10,
+    paddingBottom: 0,
+    paddingLeft: isIphoneX ? 30 : 20,
+    fontSize: 16,
+    lineHeight: 25,
+  },
   toolbar: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 0,
-    paddingRight: 10,
-    paddingLeft: 5,
+    paddingBottom: isIphoneX ? 10 : 0,
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: isIphoneX ? 64 : 54,
-    paddingBottom: isIphoneX ? 10 : 0,
+    minHeight: isIphoneX ? 68 : 58,
     zIndex: 3,
     backgroundColor: 'rgba(30,30,30,.6)',
   },
+  toolbarRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minHeight: 58,
+    alignItems: 'center',
+    paddingHorizontal: isIphoneX ? 20 : 10,
+    backgroundColor: 'transparent',
+  },
+
   toolbar__buttons: {
     justifyContent: 'flex-end',
     flexDirection: 'row',

@@ -8,10 +8,10 @@ import theme from '../../style/theme';
 
 const LocateButton = ({ onPress, isLocating }) => (
   <View style={styles.button}>
-    <TouchableOpacity onPress={onPress} style={styles.buttonText}>
+    <TouchableOpacity onPress={onPress} style={styles.buttonContent}>
       <MDIcon
         size={20}
-        style={{ color: isLocating ? theme.blush : 'rgba(255,255,255,.5)' }}
+        style={{ color: isLocating ? theme.blush : theme.inactive }}
         name="navigation"
       />
     </TouchableOpacity>
@@ -20,14 +20,14 @@ const LocateButton = ({ onPress, isLocating }) => (
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'rgba(30,30,30,.99)',
-    // shadowColor: '#000000',
-    // shadowOpacity: 0.15,
-    // shadowRadius: 10,
-    // shadowOffset: {
-    //   height: 5,
-    //   width: 0,
-    // },
+    backgroundColor: 'rgba(30,30,30,.97)',
+    shadowColor: '#000000',
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOffset: {
+      height: 5,
+      width: 0,
+    },
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
   },
   buttonContent: {
     flex: 1,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },

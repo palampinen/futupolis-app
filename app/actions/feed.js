@@ -1,6 +1,7 @@
 import api from '../services/api';
 import { createRequestActionTypes } from '.';
 import { getCityId } from '../concepts/city';
+import { fetchMapPosts } from '../concepts/user-map';
 import { getFeedSortType } from '../concepts/sortType';
 import { getAllPostsInStore } from '../reducers/feed';
 import { SET_COMMENTS as _SET_COMMENTS } from '../concepts/comments';
@@ -25,10 +26,10 @@ const { VOTE_FEED_ITEM_REQUEST, VOTE_FEED_ITEM_SUCCESS } = createRequestActionTy
 );
 
 const fetchFeed = () => (dispatch, getState) => {
-  // const cityId = getCityId(getState());
-  const sort = getFeedSortType(getState());
+  dispatch(fetchMapPosts());
 
   dispatch({ type: GET_FEED_REQUEST });
+  const sort = getFeedSortType(getState());
   return api
     .fetchModels('feed', { sort })
     .then(items => {
@@ -43,9 +44,9 @@ const fetchFeed = () => (dispatch, getState) => {
 };
 
 const refreshFeed = () => (dispatch, getState) => {
-  dispatch({ type: REFRESH_FEED_REQUEST });
+  dispatch(fetchMapPosts());
 
-  // const cityId = getCityId(getState());
+  dispatch({ type: REFRESH_FEED_REQUEST });
   const sort = getFeedSortType(getState());
   return api
     .fetchModels('feed', { sort })
@@ -63,7 +64,6 @@ const refreshFeed = () => (dispatch, getState) => {
 const loadMoreItems = lastID => (dispatch, getState) => {
   dispatch({ type: REFRESH_FEED_REQUEST });
 
-  // const cityId = getCityId(getState());
   const sort = getFeedSortType(getState());
   return api
     .fetchMoreFeed(lastID, { sort })

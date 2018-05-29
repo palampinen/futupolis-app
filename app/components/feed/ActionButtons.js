@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     height: 46,
   },
   actionButtonContent: {
-    color: theme.blue2,
+    color: theme.dark,
   },
   overlay: {
     right: 43,
@@ -247,7 +247,7 @@ class ActionButtons extends Component {
       const isCoolingDown = this.props.disabledActionTypes.find(dat => dat === actionTypeCode);
 
       const iconOrCooldownTime = isCoolingDown ? (
-        <Text style={[styles.actionButtonContent, { top: IOS ? 2 : 0 }]}>
+        <Text style={[styles.actionButtonContent, { top: IOS ? 3 : 0 }]}>
           {this.getCooldownTime(actionTypeCode)}
         </Text>
       ) : (
@@ -262,16 +262,19 @@ class ActionButtons extends Component {
         },
       ];
 
+      const onActionButtonPress = this.onPressActionButtons.bind(this, actionTypeCode, this.props.onPressAction);
+
       return (
         <Animated.View key={`button-${i}`} style={actionButtonStyles}>
           <ActionButtonLabel
             additionalLabel={actionTypeValue}
             extraStyle={{ opacity: this.state.labels[i] }}
+            onPress={onActionButtonPress}
           >
             {labelName}
           </ActionButtonLabel>
           <ActionButton
-            onPress={this.onPressActionButtons.bind(this, actionTypeCode, this.props.onPressAction)}
+            onPress={onActionButtonPress}
             disabled={isCoolingDown}
             extraStyle={styles.actionButton}
           >

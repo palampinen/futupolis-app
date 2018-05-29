@@ -5,9 +5,9 @@ export function checkForUpdates() {
   if (!__DEV__) {
     CodePush.sync({
       updateDialog: {
-        title: 'Upgrade your Futubohemia',
+        title: 'Upgrade your Futupolis',
 
-        optionalUpdateMessage: 'We have an update for you! Make your Futubohemia better and get it now! Just press the button and the app will update itself automatically.',
+        optionalUpdateMessage: 'We have an update for you! Make your Futupolis better and get it now! Just press the button and the app will update itself automatically.',
         optionalInstallButtonLabel: 'Yes, do it!',
         optionalIgnoreButtonLabel: 'Please no! I hate improvements and love bugs!',
 

@@ -153,13 +153,13 @@ dependencies {
     // Firebase dependencies
     implementation 'com.google.android.gms:play-services-base:12.0.1'
     implementation 'com.google.firebase:firebase-core:12.0.1'
-    // implementation 'com.google.firebase:firebase-messaging:12.0.1'
+
     implementation 'com.google.firebase:firebase-database:12.0.1'
+    implementation 'com.google.firebase:firebase-messaging:12.0.1'
 
     implementation project(':rn-async-storage')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-share')
-    implementation project(':react-native-push-notification')
     implementation project(':react-native-photo-view')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-image-zoom')

@@ -1,8 +1,8 @@
 export default {
   EVENT: require('../../assets/markers/marker.png'),
-  HOME: require('../../assets/markers/futu_home.png'),
-  FUTUCAMP: require('../../assets/markers/futu.png'),
-  SUMMER: require('../../assets/markers/summer_party.png'),
+  HOME: require('../../assets/markers/marker__plain.png'),
+  FUTUCAMP: require('../../assets/markers/marker__plain.png'),
+  SUMMER: require('../../assets/markers/marker__plain.png'),
   DEFAULT: require('../../assets/markers/marker__plain.png'),
   SELECTED: require('../../assets/markers/marker__selected.png'),
 };

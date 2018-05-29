@@ -21,9 +21,9 @@ import typography from '../../style/typography';
 const IOS = Platform.OS === 'ios';
 
 class NotificationsList extends Component {
-  componentDidMount() {
-    this.props.fetchNotifications();
-  }
+  // componentDidMount() {
+  //   this.props.fetchNotifications();
+  // }
 
   // componentWillReceiveProps({ currentTab }) {
   //   // Fetch on Settings tab
@@ -35,7 +35,6 @@ class NotificationsList extends Component {
   @autobind
   openNotification(notification) {
     console.log('open notification');
-    // this.props.openComments(postId);
     this.props.navigator.push({
       component: NotificationDetail,
       name: 'Notification',
@@ -61,8 +60,6 @@ class NotificationsList extends Component {
     if (!notifications.size) {
       return <EmptyState />;
     }
-
-    console.log(notifications);
 
     return (
       <ScrollView>

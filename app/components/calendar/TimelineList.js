@@ -115,13 +115,14 @@ class TimelineList extends Component {
   }
 
   @autobind
-  navigateToSingleEvent(model) {
+  navigateToSingleEvent(model, rowId) {
     const startDay = moment(model.startTime).format('ddd D.M.');
 
     this.props.navigator.push({
       showName: true,
       component: EventDetail,
       name: '',
+      rowId,
       model,
     });
   }
@@ -129,17 +130,8 @@ class TimelineList extends Component {
   updateListItems(eventsData) {
     const now = moment();
     let events = eventsData
-      .filter(item => moment(item.get('endTime')).isSameOrAfter(now))
       .map(item => {
         item.set('timelineType', 'event');
-        return item;
-      })
-      .toJS();
-
-    let pastEvents = eventsData
-      .filter(item => moment(item.get('endTime')).isBefore(now))
-      .map(item => {
-        item.set('timelineType', PAST_EVENTS_SECTION);
         return item;
       })
       .toJS();
@@ -160,12 +152,6 @@ class TimelineList extends Component {
     const eventSectionsOrder = _.orderBy(_.keys(listSections));
 
     let listOrder = [...eventSectionsOrder];
-
-    // Past events
-    if (pastEvents.length > 0) {
-      listSections[PAST_EVENTS_SECTION] = pastEvents;
-      listOrder.push(PAST_EVENTS_SECTION);
-    }
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRowsAndSections(listSections, listOrder),
@@ -205,7 +191,7 @@ class TimelineList extends Component {
         rowId={+rowId}
         pastEvent={sectionId === PAST_EVENTS_SECTION}
         currentDistance={null}
-        handlePress={() => this.navigateToSingleEvent(item)}
+        handlePress={() => this.navigateToSingleEvent(item, rowId)}
         scrollPos={this.state.yOffset}
       />
     );

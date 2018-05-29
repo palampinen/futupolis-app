@@ -4,7 +4,7 @@ import { parseInt } from 'lodash';
 
 import api from '../services/api';
 import { createRequestActionTypes } from '../actions';
-import { VOTE_FEED_ITEM_REQUEST, SET_COMMENTS } from '../actions/feed';
+import { VOTE_FEED_ITEM_REQUEST, SET_COMMENTS, DELETE_FEED_ITEM } from '../actions/feed';
 import { getUserId } from './registration';
 
 // # Selectors
@@ -116,6 +116,17 @@ export default function city(state = initialState, action) {
         );
       }
     }
+
+    case DELETE_FEED_ITEM:
+      const originalList = state.getIn(['myProfile', 'images'], List());
+      const itemIndex = originalList.findIndex((item) => item.get('id') === action.item.id);
+
+      if (itemIndex < 0) {
+        console.log('Tried to delete item, but it was not found from state:', itemIndex);
+        return state;
+      } else {
+        return state.setIn(['myProfile', 'images'], originalList.delete(itemIndex));
+      }
 
     default: {
       return state;

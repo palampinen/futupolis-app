@@ -10,8 +10,6 @@ import loggerConfig from '../utils/loggerConfig';
 import * as reducers from '../reducers';
 import MainView from './MainView';
 import { checkUserLogin } from '../concepts/auth';
-import permissions from '../services/android-permissions';
-import PushNotification from 'react-native-push-notification-ce';
 
 const IOS = Platform.OS === 'ios';
 
@@ -37,7 +35,6 @@ class RootView extends Component {
     }
 
     store.dispatch(checkUserLogin());
-    PushNotification.appStart()
   }
 
   render() {

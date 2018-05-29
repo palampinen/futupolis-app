@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     width,
   },
   inputField: {
-    backgroundColor: theme.red,
+    backgroundColor: theme.transparent,
     color: theme.white,
     height: 52,
     fontSize: 14,
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     left: 0,
     width: width - (IOS ? 75 : 60),
+    fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
   },
   rightButtons: {
     position: 'absolute',

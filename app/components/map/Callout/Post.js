@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
 const CalloutPost = ({ item, openComments, onImagePress }) => {
   return (
-    <Callout onImagePress={onImagePress} itemId={item.get('id')} imageUrl={item.get('url')}>
+    <Callout onImagePress={onImagePress} imageUrl={item.get('url')}>
       <View style={styles.postInfo}>
         {/*
         <CalloutButton onPress={() => openComments(item.get('id'))}>

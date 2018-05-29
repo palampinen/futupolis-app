@@ -5,6 +5,7 @@ import api from '../services/api';
 import ActionTypes from '../constants/ActionTypes';
 import * as NotificationMessages from '../utils/notificationMessage';
 import { refreshFeed } from './feed';
+import { fetchMyImages } from '../concepts/user';
 import { sortFeedChronological } from '../concepts/sortType';
 import { getCityId } from '../concepts/city';
 import { fetchUserLocation, getLocation } from '../concepts/location';
@@ -55,11 +56,14 @@ const _postAction = (payload, addLocation) => {
         return api.postAction(payload, maybeLocationToPost);
       })
       .then(response => {
-        // Set feed sort to 'new' if posted image or text, otherwise just refresh
+        // Refresh feed
         if ([ActionTypes.TEXT, ActionTypes.IMAGE].indexOf(payload.type) >= 0) {
-          dispatch(sortFeedChronological());
-        } else {
           dispatch(refreshFeed());
+        }
+
+        // Refresh users images
+        if (payload.type === ActionTypes.IMAGE) {
+          dispatch(fetchMyImages());
         }
 
         dispatch({ type: POST_ACTION_SUCCESS, payload: { type: payload.type } });
@@ -108,13 +112,13 @@ const postText = text => dispatch =>
     dispatch(
       _postAction({
         type: ActionTypes.TEXT,
-        text: text,
+        text,
       })
     )
   ).then(() => {
     setTimeout(() => {
       dispatch(closeTextActionView());
-    }, 2000);
+    }, 1500);
   });
 
 const postImage = ({ image, text, imageText, imageTextPosition, addLocation }) => {

@@ -8,24 +8,25 @@
 #import "AppDelegate.h"
 
 #import <Firebase.h>
+
 #import <React/RCTPushNotificationManager.h>
 #import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import "RNFIRMessaging.h"
+
+#import "RNFirebaseNotifications.h"
+#import "RNFirebaseMessaging.h"
 
 @import GoogleMaps;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
   NSURL *jsCodeLocation;
 
   [GMSServices provideAPIKey:@"AIzaSyD-mtFqN7u86BpCduAu6kAzjnY_A_FHoxI"];
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
-  [FIRApp configure];
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Futupolis"
@@ -38,6 +39,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  [RNFirebaseNotifications configure];
+
   return YES;
 }
 
@@ -48,32 +52,46 @@
     sourceApplication:sourceApplication annotation:annotation];
 }
 
-
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
-{
- [RNFIRMessaging willPresentNotification:notification withCompletionHandler:completionHandler];
+//  react-native-firebase Notifications
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+  [[RNFirebaseNotifications instance] didReceiveLocalNotification:notification];
 }
 
-#if defined(__IPHONE_11_0)
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
-{
- [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
-}
-#else
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler
-{
- [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
-}
-#endif
-
- //You can skip this method if you don't want to use local notification
--(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
- [RNFIRMessaging didReceiveLocalNotification:notification];
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
+                                                       fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+  [[RNFirebaseNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
- [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+  [[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
 }
+
+// react-native-fcm
+// - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+// {
+//  [RNFIRMessaging willPresentNotification:notification withCompletionHandler:completionHandler];
+// }
+
+// #if defined(__IPHONE_11_0)
+// - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+// {
+//  [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+// }
+// #else
+// - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler
+// {
+//  [RNFIRMessaging didReceiveNotificationResponse:response withCompletionHandler:completionHandler];
+// }
+// #endif
+
+//  //You can skip this method if you don't want to use local notification
+// -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+//  [RNFIRMessaging didReceiveLocalNotification:notification];
+// }
+
+// - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+//  [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+// }
 
 // // Required to register for notifications
 //  - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings

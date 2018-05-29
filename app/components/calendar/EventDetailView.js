@@ -15,19 +15,19 @@ import {
   TouchableHighlight,
   Image,
 } from 'react-native';
-
+import moment from 'moment';
+import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ParallaxView from 'react-native-parallax-view';
+
 import theme from '../../style/theme';
 import Toolbar from './EventDetailToolbar';
 import Text from '../Text';
 import Notification from '../common/Notification';
 import AnimateMe from '../AnimateMe';
 
-import moment from 'moment';
-import { connect } from 'react-redux';
 import analytics from '../../services/analytics';
 import { checkIn } from '../../actions/competition';
 import time from '../../utils/time';
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     fontSize: 25,
-    lineHeight: 29,
+    lineHeight: 27,
     textAlign: 'left',
     color: theme.light,
     elevation: 2,
@@ -279,6 +279,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const orangeColor = 'rgba(253,95,0,.4)';
+
 class EventDetail extends Component {
   propTypes: {
     navigator: PropTypes.object.isRequired,
@@ -305,8 +307,7 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { model, currentDistance } = this.props.route;
-    const timepoint = time.formatEventTime(model.startTime, model.endTime, { formatLong: true });
+    const { model, currentDistance, rowId } = this.props.route;
     const wrapperStyleAdd = {
       paddingTop: 0,
     };
@@ -316,7 +317,6 @@ class EventDetail extends Component {
     const speakersCount = speakers ? speakers.length : 0;
     const eventGeoUrl = locationService.getGeoUrl(model);
     const animationDuration = 175;
-
     return (
       <View style={[styles.wrapper, wrapperStyleAdd]}>
         {!IOS ? (
@@ -329,12 +329,12 @@ class EventDetail extends Component {
         <ParallaxView
           backgroundSource={{ uri: coverImage }}
           windowHeight={450}
-          style={{ backgroundColor: theme.black }}
+          style={{ backgroundColor: theme.black, shadowOpacity: 0 }}
           header={
             <View style={{ flex: 1, elevation: 3 }}>
               <LinearGradient
                 locations={[0, 0.6, 0.9]}
-                colors={['transparent', 'rgba(0,0,0,.15)', 'rgba(0,0,0,.5)']}
+                colors={['transparent', 'transparent', orangeColor]}
                 style={styles.gridListItemImgColorLayer}
               >
                 <Text style={styles.header} bold>
@@ -398,7 +398,7 @@ class EventDetail extends Component {
                     Time
                   </Text>
                   <Text style={styles.gridListItemPlace}>
-                    {timepoint.time} - {timepoint.endTime}
+                    {moment(model.startTime).format('HH:mm')} - {moment(model.endTime).format('HH:mm')}
                   </Text>
                 </View>
               </AnimateMe>
