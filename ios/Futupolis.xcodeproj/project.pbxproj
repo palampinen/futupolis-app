@@ -40,9 +40,8 @@
 		30C0FD12F2451B36CFC181F7 /* libPods-FutupolisTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B5146CB4ED1FD7BF42F225F /* libPods-FutupolisTests.a */; };
 		473CE10D7E404B65BA01499E /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 670392158777490D98FB4B13 /* EvilIcons.ttf */; };
 		495B19DD47474750A3983C73 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF177306618B47BC832A9D76 /* Ionicons.ttf */; };
-		5595D9F4435CFBD6BD6115AA /* libPods-Futupolis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC9B02ADBA634137948F3D76 /* libPods-Futupolis.a */; };
 		568E66227B1041EFB1FF0044 /* Monospaced-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E36CA0D7B3D44540A0A0B84A /* Monospaced-Regular.otf */; };
-		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
+		681C5E2920BE9BD80011922D /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		683D2C492091D40A00800579 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 683D2C462091D3EB00800579 /* libRNDeviceInfo.a */; };
 		683D2C532091D45B00800579 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 683D2C502091D44A00800579 /* libRCTPushNotification.a */; };
 		6840CBAB20B5AF3E0014498A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6840CBAA20B5AF3D0014498A /* GoogleService-Info.plist */; };
@@ -75,6 +74,7 @@
 		68543C6620931F5D00A86CFE /* AIRGoogleMapURLTileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 68543C1D20931F5C00A86CFE /* AIRGoogleMapURLTileManager.m */; };
 		68543C6720931F5D00A86CFE /* DummyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68543C1F20931F5C00A86CFE /* DummyView.m */; };
 		68543C6820931F5D00A86CFE /* RCTConvert+GMSMapViewType.m in Sources */ = {isa = PBXBuildFile; fileRef = 68543C2120931F5C00A86CFE /* RCTConvert+GMSMapViewType.m */; };
+		689EF0A120BE996300B6C0E3 /* libPods-Futupolis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC9B02ADBA634137948F3D76 /* libPods-Futupolis.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8ACB569E0F0343F7B12B8F9F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CFD21CB33B61448382AC16EC /* SimpleLineIcons.ttf */; };
 		979EF1710A5C437D9D92C32B /* Futurice-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F4358F3DD134A18A97FAA1F /* Futurice-Regular.ttf */; };
@@ -605,6 +605,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				689EF0A120BE996300B6C0E3 /* libPods-Futupolis.a in Frameworks */,
 				6840CC1A20B69D6A0014498A /* libRNFIRMessaging.a in Frameworks */,
 				683D2C532091D45B00800579 /* libRCTPushNotification.a in Frameworks */,
 				683D2C492091D40A00800579 /* libRNDeviceInfo.a in Frameworks */,
@@ -618,9 +619,8 @@
 				684F4B7A2091CB2B007E966E /* libRNBlur.a in Frameworks */,
 				684F4B792091CB25007E966E /* libA0Auth0.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
+				681C5E2920BE9BD80011922D /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -630,7 +630,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				5595D9F4435CFBD6BD6115AA /* libPods-Futupolis.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,7 +1172,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -2038,6 +2037,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Futupolis.app/Futupolis";
 			};
@@ -2083,6 +2083,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Futupolis.app/Futupolis";
 			};
@@ -2381,20 +2382,30 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2422,13 +2433,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2436,6 +2455,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
