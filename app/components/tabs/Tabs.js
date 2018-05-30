@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const ReactNative = require('react-native');
-const { StyleSheet, View, Animated, Platform } = ReactNative;
+const { StyleSheet, View, Animated, Platform, ViewPropTypes } = ReactNative;
 const Button = require('./TabButton');
 const IOS = Platform.OS === 'ios';
 import Text from '../Text';
@@ -97,9 +97,9 @@ DefaultTabBar.propTypes = {
   backgroundColor: PropTypes.string,
   activeTextColor: PropTypes.string,
   inactiveTextColor: PropTypes.string,
-  tabStyle: View.propTypes.style,
+  tabStyle: ViewPropTypes.style,
   renderTab: PropTypes.func,
-  underlineStyle: View.propTypes.style,
+  underlineStyle: ViewPropTypes.style,
 };
 
 DefaultTabBar.defaultProps = {

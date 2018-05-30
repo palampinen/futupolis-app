@@ -6,7 +6,8 @@ import {
   TouchableHighlight,
   Platform,
   PropTypes,
-  StyleSheet
+  StyleSheet,
+  ViewPropTypes,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -20,45 +21,44 @@ const styles = StyleSheet.create({
     right: 20,
     width: 56,
     height: 56,
-    borderRadius: 28
+    borderRadius: 28,
   },
   content: {
     bottom: 0,
-    right: 0
+    right: 0,
   },
   disabledButton: {
-    opacity: 0.6
-  }
+    opacity: 0.6,
+  },
 });
-
 
 class Fab extends Component {
   propTypes: {
-    styles: View.propTypes.style,
+    styles: ViewPropTypes.style,
     onPress: PropTypes.func,
     onPressIn: PropTypes.func,
     onPressOut: PropTypes.func,
-    underlayColor: PropTypes.string
-  }
+    underlayColor: PropTypes.string,
+  };
 
   render() {
-    const touchableProps = this.props.disabled ? {} : {
-      onPress: this.props.onPress,
-      onPressIn: this.props.onPressIn,
-      onPressOut: this.props.onPressOut,
-      underlayColor: this.props.underlayColor
-    };
+    const touchableProps = this.props.disabled
+      ? {}
+      : {
+          onPress: this.props.onPress,
+          onPressIn: this.props.onPressIn,
+          onPressOut: this.props.onPressOut,
+          underlayColor: this.props.underlayColor,
+        };
 
-    const buttonStyles = this.props.disabled ?
-      [styles.button, this.props.styles, styles.disabledButton] :
-      [styles.button, this.props.styles];
+    const buttonStyles = this.props.disabled
+      ? [styles.button, this.props.styles, styles.disabledButton]
+      : [styles.button, this.props.styles];
 
     return (
       <TouchableHighlight {...touchableProps} style={buttonStyles}>
         <View style={[styles.content]}>
-          <View>
-            {this.props.children}
-          </View>
+          <View>{this.props.children}</View>
         </View>
       </TouchableHighlight>
     );
@@ -66,4 +66,3 @@ class Fab extends Component {
 }
 
 export default Fab;
-
