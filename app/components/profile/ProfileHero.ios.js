@@ -32,13 +32,14 @@ import { width, IOS } from '../../services/device-info';
 import { getInitialLetters } from '../../services/user';
 import theme from '../../style/theme';
 import AnimateMe from '../AnimateMe';
+import PlatformTouchable from '../common/PlatformTouchable';
 import Text from '../Text';
 import RingLightImage from '../RingLight';
 
 const avatarFilterImage = require('../../../assets/futupolis/film-filter.png');
 const solidPattern = require('../../../assets/futupolis/solid.png');
 const robot = require('../../../assets/futupolis/face-fade.gif');
-const robotAvatar = require('../../../assets/futupolis/avatar--robot.png');
+const robotAvatar = require('../../../assets/futupolis/avatar-robot.png');
 
 class ProfileHero extends Component {
   @autobind
@@ -108,6 +109,7 @@ class ProfileHero extends Component {
           windowHeight={250}
           style={{ backgroundColor: theme.darker, shadowOpacity: 0 }}
           scrollableViewStyle={{ shadowColor: theme.transparent }}
+          showsVerticalScrollIndicator={false}
           header={
             <View style={styles.header}>
               <Image
@@ -128,35 +130,24 @@ class ProfileHero extends Component {
               />
 
               {!!user.name && (
-                <TouchableOpacity
-                  onPress={this.openImagePicker}
-                  style={styles.avatarChangeIconWrap}
-                >
-                  <View>
-                    <Icon style={styles.avatarChangeIcon} name="camera-alt" />
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.avatarChangeIconWrap}>
+                  <PlatformTouchable
+                    onPress={this.openImagePicker}
+                    background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
+                    delayPressIn={0}
+                  >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                      <Icon style={styles.avatarChangeIcon} name="camera-alt" />
+                    </View>
+                  </PlatformTouchable>
+                </View>
               )}
 
-              <AnimateMe delay={100} animationType="fade-from-bottom">
-                <Text style={styles.headerTitle} bold>{user.name}</Text>
+              <AnimateMe delay={100} style={{ flex: 0 }} animationType="fade-from-bottom">
+                <Text style={styles.headerTitle} bold>
+                  {user.name}
+                </Text>
               </AnimateMe>
-              {/*
-              <View style={styles.headerKpis}>
-                <View style={styles.headerKpi}>
-                  <Text style={styles.headerKpiValue}>{!isLoading ? imagesCount : '-'}</Text>
-                  <Text style={styles.headerKpiTitle}>photos</Text>
-                </View>
-                <View style={styles.headerKpi}>
-                  <Text style={styles.headerKpiValue}>{!isLoading ? totalVotes : '-'}</Text>
-                  <Text style={styles.headerKpiTitle}>votes for photos</Text>
-                </View>
-                <View style={styles.headerKpi}>
-                  <Text style={styles.headerKpiValue}>{!isLoading ? totalSimas || '-' : '-'}</Text>
-                  <Text style={styles.headerKpiTitle}>simas</Text>
-                </View>
-              </View>
-            */}
             </View>
           }
         >
@@ -175,7 +166,6 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     paddingBottom: 15,
-    // alignItems: 'center',
     justifyContent: 'flex-end',
   },
   headerTitle: {
@@ -223,7 +213,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2,
   },
   avatarTextChangeIconWrap: {},
   avatarChangeIcon: {
@@ -241,7 +230,7 @@ const styles = StyleSheet.create({
   },
   placeholderAvatarStyles: {
     position: 'absolute',
-    left: (width/2)-150,
+    left: width / 2 - 150,
     width: 300,
     height: 300,
     top: -30,
@@ -317,4 +306,7 @@ const mapStateToProps = createStructuredSelector({
   userImage: getUserPicture,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileHero);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileHero);

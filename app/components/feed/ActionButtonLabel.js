@@ -5,6 +5,8 @@ import { Animated, View, Platform, StyleSheet, TouchableOpacity } from 'react-na
 import Text from '../Text';
 import theme from '../../style/theme';
 
+const IOS = Platform.OS === 'ios';
+
 const styles = StyleSheet.create({
   label: {
     flex: 1,
@@ -12,7 +14,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     padding: 6,
     top: 16,
-    height: Platform.OS === 'ios' ? 26 : 27,
+    height: IOS ? 26 : 27,
     backgroundColor: '#FFF',
     elevation: 2,
     borderRadius: 3,
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 12,
     fontWeight: 'normal',
-    top: 2,
+    top: IOS ? 2 : 0,
     color: theme.dark,
   },
   additionalLabelText: {

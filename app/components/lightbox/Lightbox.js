@@ -208,20 +208,18 @@ class LightBox extends Component {
                   </Text>
                 )}
                 <View style={styles.date}>
-                  <Text style={styles.dateText}>
-                    {time.formatActionTime(createdAt)}
-                  </Text>
+                  <Text style={styles.dateText}>{time.formatActionTime(createdAt)}</Text>
                 </View>
               </View>
             </View>
           </View>
 
           <View style={styles.toolbar}>
-            {!!itemText &&
-            <View>
-              <Text style={styles.imageCaptionText}>{itemText}</Text>
-            </View>
-            }
+            {!!itemText && (
+              <View>
+                <Text style={styles.imageCaptionText}>{itemText}</Text>
+              </View>
+            )}
             <View style={styles.toolbarRow}>
               <View>
                 <VotePanel
@@ -242,6 +240,8 @@ class LightBox extends Component {
 
               {!isSystemUser && (
                 <PlatformTouchable
+                  background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
+                  delayPressIn={0}
                   onPress={() => this.showRemoveDialog(lightBoxItem)}
                   activeOpacity={0.8}
                 >
@@ -253,7 +253,12 @@ class LightBox extends Component {
                   </View>
                 </PlatformTouchable>
               )}
-              <PlatformTouchable onPress={this.onShare.bind(this, itemImage)} activeOpacity={0.8}>
+              <PlatformTouchable
+                background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
+                delayPressIn={0}
+                onPress={this.onShare.bind(this, itemImage)}
+                activeOpacity={0.8}
+              >
                 <View style={styles.toolbar__button}>
                   <Icon style={styles.toolbar__icon} name="share" />
                 </View>
@@ -366,9 +371,9 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   toolbar__button: {
-    borderRadius: 25,
-    width: 50,
-    height: 50,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
     marginTop: IOS ? 0 : 1,
     marginLeft: 15,
     alignItems: 'center',
@@ -402,4 +407,7 @@ const mapDispatch = {
   openComments,
 };
 
-export default connect(select, mapDispatch)(LightBox);
+export default connect(
+  select,
+  mapDispatch
+)(LightBox);

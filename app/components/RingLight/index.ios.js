@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RingLight = ({ source, style, width, height}) => (
+const RingLight = ({ source, style, width, height }) => (
   <View style={[style, { width: width + 6, height: height + 6, padding: 3 }]}>
     <Image source={source} style={style} />
     <Image source={ringLightImage} style={[{ width: width + 6, height: height + 6 }, styles.img]} />

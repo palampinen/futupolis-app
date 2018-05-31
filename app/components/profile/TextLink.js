@@ -24,8 +24,6 @@ const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
 
 class TextLink extends Component {
-
-
   @autobind
   onLinkPress(url, text, openInWebview) {
     if (!url) {
@@ -45,7 +43,7 @@ class TextLink extends Component {
 
   @autobind
   renderLinkItem(item, index) {
-    const linkItemStyles = [styles.listItemButton];
+    const linkItemStyles = [];
 
     if (item.separatorAfter || item.last) {
       linkItemStyles.push(styles.listItemSeparator);
@@ -55,43 +53,40 @@ class TextLink extends Component {
       linkItemStyles.push(styles.listItemLast);
     }
 
-
     return (
-      <PlatformTouchable
-        key={index}
-        underlayColor={'#eee'}
-        activeOpacity={0.6}
-        delayPressIn={0}
-        style={styles.listItemButton}
-        onPress={() =>
-          item.mailto
-            ? feedback.sendEmail(item.mailto)
-            : this.onLinkPress(item.link, item.title, item.showInWebview)
-        }
-      >
-        <View style={linkItemStyles}>
-          <View
-            style={styles.listItem}
-          >
+      <View style={styles.listItemButton}>
+        <PlatformTouchable
+          key={index}
+          underlayColor={'#eee'}
+          activeOpacity={0.6}
+          delayPressIn={0}
+          onPress={() =>
+            item.mailto
+              ? feedback.sendEmail(item.mailto)
+              : this.onLinkPress(item.link, item.title, item.showInWebview)
+          }
+        >
+          <View style={linkItemStyles}>
+            <View style={styles.listItem}>
+              <View style={styles.listItemIcons}>
+                <Icon style={styles.listItemIcon} name={item.icon} />
+              </View>
 
-          <View style={styles.listItemIcons}>
-            <Icon style={styles.listItemIcon} name={item.icon} />
-          </View>
-
-            <View style={styles.listItemTitles}>
-              <Text style={styles.listItemText}>{item.title}</Text>
-              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+              <View style={styles.listItemTitles}>
+                <Text style={styles.listItemText}>{item.title}</Text>
+                {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+              </View>
+              {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
             </View>
-            {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
           </View>
-        </View>
-      </PlatformTouchable>
+        </PlatformTouchable>
+      </View>
     );
   }
 
   @autobind
   renderComponentItem(item, index) {
-    const linkItemStyles = [styles.listItemButton];
+    const linkItemStyles = [];
     const { navigator } = this.props;
     const { component, title } = item;
 
@@ -100,35 +95,36 @@ class TextLink extends Component {
     }
 
     return (
-      <PlatformTouchable
-        key={index}
-        underlayColor={'#eee'}
-        activeOpacity={0.6}
-        delayPressIn={0}
-        style={styles.listItemButton}
-        onPress={() => navigator.push({ name: title, component, showName: true })}
-      >
-        <View style={linkItemStyles}>
-          <View style={styles.listItem}>
-            <View style={styles.listItemIcons}>
-              <View style={styles.listItemIconWrap}>
-                <Icon style={styles.listItemIcon} name={item.icon} />
+      <View style={styles.listItemButton}>
+        <PlatformTouchable
+          key={index}
+          underlayColor={'#eee'}
+          activeOpacity={0.6}
+          delayPressIn={0}
+          onPress={() => navigator.push({ name: title, component, showName: true })}
+        >
+          <View style={linkItemStyles}>
+            <View style={styles.listItem}>
+              <View style={styles.listItemIcons}>
+                <View style={styles.listItemIconWrap}>
+                  <Icon style={styles.listItemIcon} name={item.icon} />
+                </View>
               </View>
+              <View style={styles.listItemTitles}>
+                <Text style={styles.listItemText}>{item.title}</Text>
+                {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+              </View>
+              {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
             </View>
-            <View style={styles.listItemTitles}>
-              <Text style={styles.listItemText}>{item.title}</Text>
-              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
-            </View>
-            {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
           </View>
-        </View>
-      </PlatformTouchable>
+        </PlatformTouchable>
+      </View>
     );
   }
 
   @autobind
   renderCustomItem(item, index) {
-    const linkItemStyles = [styles.listItemButton];
+    const linkItemStyles = [];
 
     if (item.separatorAfter || item.last) {
       linkItemStyles.push(styles.listItemSeparator);
@@ -139,30 +135,30 @@ class TextLink extends Component {
     }
 
     return (
-      <PlatformTouchable
-        key={index}
-        underlayColor={'#eee'}
-        activeOpacity={0.6}
-        delayPressIn={0}
-        style={styles.listItemButton}
-        onPress={item.onPress}
-      >
-        <View style={linkItemStyles}>
-          <View style={styles.listItem}>
-
-            <View style={styles.listItemIcons}>
-              <View style={styles.listItemIconWrap}>
-                <Icon style={styles.listItemIcon} name={item.icon} />
+      <View style={styles.listItemButton}>
+        <PlatformTouchable
+          key={index}
+          underlayColor={'#eee'}
+          activeOpacity={0.6}
+          delayPressIn={0}
+          onPress={item.onPress}
+        >
+          <View style={linkItemStyles}>
+            <View style={styles.listItem}>
+              <View style={styles.listItemIcons}>
+                <View style={styles.listItemIconWrap}>
+                  <Icon style={styles.listItemIcon} name={item.icon} />
+                </View>
               </View>
+              <View style={styles.listItemTitles}>
+                <Text style={styles.listItemText}>{item.title}</Text>
+                {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+              </View>
+              {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
             </View>
-            <View style={styles.listItemTitles}>
-              <Text style={styles.listItemText}>{item.title}</Text>
-              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
-            </View>
-            {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
           </View>
-        </View>
-      </PlatformTouchable>
+        </PlatformTouchable>
+      </View>
     );
   }
 
@@ -183,15 +179,12 @@ class TextLink extends Component {
     }
 
     return null;
-
   }
 }
 
-
-
 const styles = StyleSheet.create({
   listItem: {
-    flex: 1,
+    flex: IOS ? 1 : 0,
     padding: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -208,14 +201,11 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   listItemSeparator: {},
-  listItemLast: {
-    marginBottom: IOS ? 0 : 20,
-  },
   listItemButton: {
     backgroundColor: IOS ? theme.transparent : theme.dark,
     padding: 0,
-    width: width - 12,
-    margin: 3,
+    width: width - 10,
+    margin: 5,
     marginBottom: 0,
     borderRadius: 5,
   },
@@ -290,9 +280,7 @@ const styles = StyleSheet.create({
 
   plainItem: {
     width,
-  }
-
+  },
 });
-
 
 export default TextLink;

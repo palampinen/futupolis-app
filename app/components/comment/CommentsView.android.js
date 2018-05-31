@@ -26,7 +26,7 @@ import {
   deleteComment,
   closeComments,
 } from '../../concepts/comments';
-import { openUserView } from '../../concepts/user';
+import { fetchUserImages } from '../../concepts/user';
 
 import theme from '../../style/theme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -45,8 +45,8 @@ class CommentsView extends Component {
   }
 
   @autobind
-  openUserView(user, avatar) {
-    this.props.openUserView(user, avatar);
+  openUserView(user) {
+    this.props.fetchUserImages(user.id);
     this.props.navigator.push({ component: UserView, name: `${user.name}`, showName: true });
   }
 
@@ -96,7 +96,7 @@ const mapDispatchToProps = {
   postComment,
   closeComments,
   deleteComment,
-  openUserView,
+  fetchUserImages,
 };
 
 const select = createStructuredSelector({
@@ -108,4 +108,7 @@ const select = createStructuredSelector({
   loadingCommentPost: isLoadingCommentPost,
 });
 
-export default connect(select, mapDispatchToProps)(CommentsView);
+export default connect(
+  select,
+  mapDispatchToProps
+)(CommentsView);

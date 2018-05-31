@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     color: theme.white,
     fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
     padding: 0,
+    paddingTop: IOS ? 0 : 2,
     width: width - 60,
     minHeight: 50,
     fontSize: 14,
@@ -102,7 +103,8 @@ class PostSettings extends Component {
             </View>
           </View>
           <Switch
-            onTintColor={theme.orange}
+            onTintColor={IOS ? theme.orange : theme.blush}
+            thumbTintColor={IOS ? null : theme.orange}
             value={postLocationStatus}
             onValueChange={togglePostLocationStatus}
           />

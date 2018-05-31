@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import autobind from 'autobind-decorator';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Text from '../Text';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 
 const heartIcon = require('../../../assets/icons/love.png');
@@ -30,17 +30,12 @@ class VotePanel extends Component {
   renderVoteButton(positive) {
     const { userVote } = this.props.item;
 
-    // const value = positive ? 1 : -1;
-    // const iconName = positive ? 'keyboard-arrow-up' : 'keyboard-arrow-down';
-    // const alreadyVotedThis = userVote === value;
-
     const value = userVote && userVote > 0 ? 0 : 1;
     const alreadyVotedThis = userVote > 0;
 
     return (
       <View style={styles.itemVoteButtonWrap}>
         <TouchableOpacity
-          // disabled={alreadyVotedThis}
           activeOpacity={0.9}
           style={styles.itemVoteButton}
           onPress={() => this.voteThisItem(value)}
@@ -50,11 +45,6 @@ class VotePanel extends Component {
               source={heartIcon}
               style={[styles.voteImage, { tintColor: alreadyVotedThis ? theme.blush : theme.grey }]}
             />
-            {/*
-              <Text style={{color: alreadyVotedThis ? theme.primary : theme.grey}}>
-                <Icon name={iconName} size={25}/>
-              </Text>
-              */}
           </View>
         </TouchableOpacity>
       </View>
@@ -68,7 +58,6 @@ class VotePanel extends Component {
         <View>
           <Text style={styles.itemVoteValue}>{this.getVotes()}</Text>
         </View>
-        {/* this.renderVoteButton() */}
       </View>
     );
   }
@@ -84,6 +73,7 @@ const styles = StyleSheet.create({
     minHeight: 42,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'red',
   },
   itemVoteButtonWrap: {
     flex: 1,

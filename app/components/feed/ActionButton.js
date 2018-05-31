@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 0 : 20,
+    bottom: Platform.OS === 'ios' ? 0 : 26,
     right: 20,
     backgroundColor: theme.orange,
     width: 56,

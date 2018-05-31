@@ -26,7 +26,7 @@ import LightBox from '../components/lightbox/Lightbox';
 
 const theme = require('../style/theme');
 const IconTabBar = require('../components/common/MdIconTabBar');
-const ANDROID_TAB_ORDER = [Tabs.FEED, Tabs.CALENDAR, Tabs.NOTIFICATIONS, Tabs.SETTINGS];
+const ANDROID_TAB_ORDER = [Tabs.FEED, Tabs.CALENDAR, Tabs.TRIP, Tabs.SETTINGS];
 const initialTab = 0;
 
 class AndroidTabNavigation extends Component {
@@ -75,8 +75,8 @@ class AndroidTabNavigation extends Component {
             tabLabel={{ title: 'Event', icon: 'event' }}
           />
           <TripInfoView
+            id={Tabs.TRIP}
             navigator={navigator}
-            id={Tabs.NOTIFICATIONS}
             tabLabel={{ title: 'Trip', icon: 'flight-takeoff' }}
           />
           <ProfileView
@@ -105,4 +105,7 @@ const select = state => {
   };
 };
 
-export default connect(select, mapDispatchToProps)(AndroidTabNavigation);
+export default connect(
+  select,
+  mapDispatchToProps
+)(AndroidTabNavigation);

@@ -76,7 +76,11 @@ class Navigation extends Component {
           <TripInfoView
             navigator={navigator}
             id={Tabs.TRIP}
-            tabLabel={{ title: 'Trip', icon: 'flight-takeoff', badge: showNotificationBadge ? '•' : null }}
+            tabLabel={{
+              title: 'Trip',
+              icon: 'flight-takeoff',
+              badge: showNotificationBadge ? '•' : null,
+            }}
           />
           <SettingsView
             navigator={navigator}
@@ -101,4 +105,7 @@ const select = state => {
   };
 };
 
-export default connect(select, mapDispatchToProps)(Navigation);
+export default connect(
+  select,
+  mapDispatchToProps
+)(Navigation);

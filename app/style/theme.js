@@ -31,6 +31,7 @@ const theme = {
 
   // Futupolis
   dark: '#333238',
+  darkLayer: 'rgba(30, 30, 30, 0.4)',
   darker: '#1f1e21',
   orange: '#fd5f00',
   mellow: '#F6D6BF',

@@ -118,27 +118,15 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
-    signingConfigs {
-        release {
-          def console = System.console()
-          if (console != null) {
-            storeFile file(System.console().readLine("\n\$ Enter keystore filename: "))
-            storePassword new String(System.console().readPassword("\n\$ Enter keystore password: "))
-            keyAlias System.console().readLine("\n\$ Enter key alias: ")
-            keyPassword new String(System.console().readPassword("\n\$ Enter alias password: "))
-          }
-       }
-    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
-        variant.outputs.all { output ->
+        variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
             def versionCodes = ["armeabi-v7a":1, "x86":2]
@@ -147,10 +135,11 @@ android {
                 output.versionCodeOverride =
                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
-            // output.outputFile = new File(
-            //   output.outputFile.parent,
-            //   output.outputFile.name.replace("app-release.apk", "futupolis-${variant.versionName}.apk"))
         }
+    }
+
+    dexOptions {
+        jumboMode = true
     }
 }
 

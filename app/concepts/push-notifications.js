@@ -1,6 +1,6 @@
 import { Platform, Alert, AsyncStorage, AppState } from 'react-native';
 import { fromJS } from 'immutable';
-import { get } from 'lodash';
+import { get, has, set, isFunction } from 'lodash';
 import firebase from 'react-native-firebase';
 // import PushNotification from 'react-native-push-notification-ce';
 // import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
@@ -17,41 +17,43 @@ import theme from '../style/theme';
 export const PUSH_NOTIFICATION_SENT = 'push-notification/PUSH_NOTIFICATION_SENT';
 export const PUSH_NOTIFICATION_CONFIGURED = 'push-notification/PUSH_NOTIFICATION_CONFIGURED';
 
-
-const navigateToNotificationList = (notif) => dispatch => {
+const navigateToNotificationList = notif => dispatch => {
   const notificationId = get(notif, 'notification.messageId');
   const killedNotificationId = get(notif, ['data', 'gcm.notification.messageId']);
+  // const androidPayloadNotificationId = get(notif, ['data', 'messageId']);
 
   const messageId = notificationId || killedNotificationId;
 
   // Alert.alert('Message ID', messageId);
+
+  if (!isFunction(dispatch)) {
+    return;
+  }
 
   if (messageId) {
     // show popup notification
     dispatch(showNotificationItem(messageId));
   } else {
     // just show notif tab
-    dispatch(changeTab(Tabs.TRIP))
-    .then(() => {
-      dispatch(changeTripTab(Tabs.NOTIFICATIONS))
-    });
+    dispatch(changeTab(Tabs.TRIP));
+    dispatch(changeTripTab(Tabs.NOTIFICATIONS));
   }
-}
+};
 
 const addPushTokenForUser = token =>
-getUserToken().then(userId => {
-  if (!userId) {
-    return;
-  }
+  getUserToken().then(userId => {
+    if (!userId) {
+      return;
+    }
 
-  firebase
-  .database()
-  .ref('/pushTokens/' + userId)
-  .set({ token })
-  .then(snapshot => {
-    console.log('pushToken added/updated for userId ' + userId);
+    firebase
+      .database()
+      .ref('/pushTokens/' + userId)
+      .set({ token })
+      .then(snapshot => {
+        console.log('pushToken added/updated for userId ' + userId);
+      });
   });
-});
 
 // # Actions
 // const showLocalNotification = (notif) => {
@@ -95,12 +97,10 @@ getUserToken().then(userId => {
 
 // registerKilledListener();
 
-
 // # App Foreground/Background State
 // function registerAppListener(dispatch) {
 //   FCM.on(FCMEvent.Notification, notif => {
 //     console.log("Notification", notif);
-
 
 //     if (Platform.OS ==='ios') {
 //       switch (notif._notificationType) {
@@ -125,52 +125,60 @@ getUserToken().then(userId => {
 //   });
 // }
 
-
 const FCM = firebase.messaging();
 
 export const configurePushNotifications = () => dispatch => {
-
   FCM.requestPermission();
 
   FCM.getToken().then(addPushTokenForUser);
 
   // Listen for Notifications
-  this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
-    // Process your notification as required
-    // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-  });
+  this.notificationDisplayedListener = firebase
+    .notifications()
+    .onNotificationDisplayed(notification => {
+      // Process your notification as required
+      // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+    });
 
-  this.notificationListener = firebase.notifications().onNotification((notification) => {
+  this.notificationListener = firebase.notifications().onNotification(notification => {
     // Process your notification as required
   });
 
   // App in Foreground and background
-  this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-    // Get the action triggered by the notification being opened
-    const action = notificationOpen.action;
-    // Get information about the notification that was opened
-    const notification = notificationOpen.notification;
-
-    console.log(notificationOpen);
-    // Alert.alert('Background App open', JSON.stringify(notification, getCircularReplacer()));
-    dispatch(navigateToNotificationList(notification));
-  });
-
-
-  firebase.notifications().getInitialNotification().then((notificationOpen) => {
-    if (notificationOpen) {
-      // App was opened by a notification
+  this.notificationOpenedListener = firebase
+    .notifications()
+    .onNotificationOpened(notificationOpen => {
       // Get the action triggered by the notification being opened
       const action = notificationOpen.action;
       // Get information about the notification that was opened
       const notification = notificationOpen.notification;
 
       console.log(notificationOpen);
-      // Alert.alert('Killed App open', JSON.stringify(notification, getCircularReplacer()));
+      // Alert.alert('Background App open', JSON.stringify(notification, getCircularReplacer()));
+      if (dispatch) {
+        dispatch(navigateToNotificationList(notification));
+      }
+    });
 
-      dispatch(navigateToNotificationList(notification));
-    }
-  });
+  firebase
+    .notifications()
+    .getInitialNotification()
+    .then(notificationOpen => {
+      if (notificationOpen) {
+        // App was opened by a notification
+        // Get the action triggered by the notification being opened
+        const action = notificationOpen.action;
+        // Get information about the notification that was opened
+        const notification = notificationOpen.notification;
+
+        // console.log(notificationOpen);
+        // Alert.alert('Killed App open', getCircularReplacer());
+
+        if (dispatch) {
+          dispatch(navigateToNotificationList(notification));
+        }
+      }
+    });
 
   // AsyncStorage.getItem('lastNotification').then(data => {
   //   if (data) {
@@ -193,7 +201,6 @@ export const configurePushNotifications = () => dispatch => {
   //   addPushTokenForUser(token);
   // });
 
-
   // FCM.getInitialNotification().then(notif => {
   //   console.log("INITIAL NOTIFICATION", notif);
   //   // if (notif) {
@@ -205,7 +212,7 @@ export const configurePushNotifications = () => dispatch => {
 
   // registerAppListener(dispatch);
 
-/*
+  /*
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function(token) {
@@ -241,17 +248,32 @@ PushNotification.configure({
 };
 
 const getCircularReplacer = () => {
-  const seen = new WeakSet;
-  return (key, value) => {
-    if (typeof value === "object" && value !== null) {
-      if (seen.has(value)) {
+  let seen = [];
+  return (key, val) => {
+    if (val != null && typeof val == 'object') {
+      if (seen.indexOf(val) >= 0) {
         return;
       }
-      seen.add(value);
+      seen.push(val);
+    }
+    return val;
+  };
+};
+
+/*
+const getCircularReplacer = () => {
+  const seen = {};
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (has(seen, value)) {
+        return;
+      }
+      set(seen, value);
     }
     return value;
   };
 };
+*/
 
 // const pushNotificationDefaults = {
 //   title: 'Futupolis',
@@ -270,7 +292,6 @@ const getCircularReplacer = () => {
 //     vibrate: true,
 //     vibration: 300,
 //     ongoing: false,
-
 
 //     title: pnOpts.title,
 //     message: pnOpts.body,

@@ -26,9 +26,7 @@ import { openLightBox } from '../../concepts/lightbox';
 import { openComments, closeComments } from '../../concepts/comments';
 import { fetchUserImages } from '../../concepts/user';
 import { openRegistrationView, getUserTeam } from '../../concepts/registration';
-import permissions from '../../services/android-permissions';
 import { IOS, height } from '../../services/device-info';
-import ImageCaptureOptions from '../../constants/ImageCaptureOptions';
 
 import Text from '../Text';
 import ImageEditor from './ImageEditor';
@@ -151,7 +149,6 @@ class FeedList extends Component {
     }
   }
 
-
   @autobind
   openUserPhotos(user) {
     if (user.id) {
@@ -185,15 +182,23 @@ class FeedList extends Component {
 
   @autobind
   renderFeed() {
-    const { feedListState, isLoadingActionTypes, isLoadingUserData, isRefreshing, isSending } = this.props;
+    const {
+      feedListState,
+      isLoadingActionTypes,
+      isLoadingUserData,
+      isRefreshing,
+      isSending,
+    } = this.props;
 
-    const refreshControl = <RefreshControl
+    const refreshControl = (
+      <RefreshControl
         refreshing={isRefreshing || isSending}
         onRefresh={this.props.refreshFeed}
-        colors={[theme.white]}
+        colors={[theme.orange]}
         tintColor={theme.white}
-        progressBackgroundColor={theme.light}
+        progressBackgroundColor={theme.dark}
       />
+    );
 
     const isLoading = isLoadingActionTypes || isLoadingUserData;
 
@@ -207,9 +212,11 @@ class FeedList extends Component {
             contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', height }}
             refreshControl={refreshControl}
           >
-              <Text style={{ marginTop: 20, textAlign: 'center', padding: 30, color: theme.inactive }}>
-                Could not get feed...
-              </Text>
+            <Text
+              style={{ marginTop: 20, textAlign: 'center', padding: 30, color: theme.inactive }}
+            >
+              Could not get feed...
+            </Text>
           </ScrollView>
         );
       default:
@@ -219,34 +226,34 @@ class FeedList extends Component {
               ref={this.props.setRef}
               dataSource={this.state.dataSource}
               showsVerticalScrollIndicator={false}
-              renderRow={(item, i) => (
-                item.mapLink
-                ?
-                <TouchableWithoutFeedback onPress={this.props.onMapItemPress}>
-                  <LinearGradient
-                    locations={[0, 0.5, 0.9]}
-                    colors={['rgba(51,50,56,.001)', 'rgba(51,50,56,.4)', theme.dark]}
-                    style={{
-                      height: 150,
-                    }}
+              renderRow={(item, i) =>
+                item.mapLink ? (
+                  <TouchableWithoutFeedback onPress={this.props.onMapItemPress}>
+                    <LinearGradient
+                      locations={[0, 0.5, 0.9]}
+                      colors={['rgba(51,50,56,.001)', 'rgba(51,50,56,.4)', theme.dark]}
+                      style={{
+                        height: 150,
+                      }}
+                    />
+                  </TouchableWithoutFeedback>
+                ) : (
+                  <FeedListItem
+                    item={item}
+                    key={item.id}
+                    userTeam={this.props.userTeam}
+                    removeFeedItem={this.props.removeFeedItem}
+                    voteFeedItem={this.props.voteFeedItem}
+                    isRegistrationInfoValid={this.props.isRegistrationInfoValid}
+                    openRegistrationView={this.props.openRegistrationView}
+                    openUserPhotos={this.openUserPhotos}
+                    openComments={this.openPostComments}
+                    closeComments={this.props.closeComments}
+                    openLightBox={this.props.openLightBox}
+                    openFeedItemInMap={this.props.openFeedItemInMap}
                   />
-                </TouchableWithoutFeedback>
-                :
-                <FeedListItem
-                  item={item}
-                  key={item.id}
-                  userTeam={this.props.userTeam}
-                  removeFeedItem={this.props.removeFeedItem}
-                  voteFeedItem={this.props.voteFeedItem}
-                  isRegistrationInfoValid={this.props.isRegistrationInfoValid}
-                  openRegistrationView={this.props.openRegistrationView}
-                  openUserPhotos={this.openUserPhotos}
-                  openComments={this.openPostComments}
-                  closeComments={this.props.closeComments}
-                  openLightBox={this.props.openLightBox}
-                  openFeedItemInMap={this.props.openFeedItemInMap}
-                />
-              )}
+                )
+              }
               style={[styles.listView]}
               onScroll={this._onScroll}
               onEndReached={this.onLoadMoreItems}
@@ -258,11 +265,7 @@ class FeedList extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        {this.renderFeed()}
-      </View>
-    );
+    return <View style={styles.container}>{this.renderFeed()}</View>;
   }
 }
 
@@ -297,4 +300,7 @@ const select = store => {
   };
 };
 
-export default connect(select, mapDispatchToProps)(FeedList);
+export default connect(
+  select,
+  mapDispatchToProps
+)(FeedList);

@@ -118,7 +118,7 @@ const postText = text => dispatch =>
   ).then(() => {
     setTimeout(() => {
       dispatch(closeTextActionView());
-    }, 1500);
+    }, 1000);
   });
 
 const postImage = ({ image, text, imageText, imageTextPosition, addLocation }) => {

@@ -3,12 +3,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 
-import {
-  getMyImages,
-  fetchMyImages,
-  isLoadingUserImages,
-} from '../../concepts/user';
+import { getMyImages, fetchMyImages, isLoadingUserImages } from '../../concepts/user';
 import { getUserName, getUserId } from '../../concepts/registration';
 import { openLightBox } from '../../concepts/lightbox';
 import { getCurrentTab } from '../../reducers/navigation';
@@ -17,7 +14,7 @@ import AnimateMe from '../AnimateMe';
 import theme from '../../style/theme';
 import Loader from '../common/Loader';
 import Text from '../Text';
-import { width, IOS } from '../../services/device-info';
+import { width, height, IOS } from '../../services/device-info';
 
 class UserView extends Component {
   componentDidMount() {
@@ -41,16 +38,18 @@ class UserView extends Component {
       user = { name: userName };
     }
 
+    const hasImages = images.size > 0;
+
     return (
       <View style={styles.container}>
         {isLoading &&
-          images.size === 0 && (
+          !hasImages && (
             <View style={styles.loader}>
               <Loader size="large" color={theme.orange} />
             </View>
           )}
         {images.size > 0 && (
-          <AnimateMe style={{ flex: IOS ? 1 : 0 }} delay={300} animationType="fade-in">
+          <AnimateMe style={{ flex: IOS ? 1 : 1 }} delay={300} animationType="fade-in">
             <View style={styles.imageContainer}>
               {images.map(image => (
                 <View key={image.get('id')}>
@@ -76,9 +75,11 @@ class UserView extends Component {
           </AnimateMe>
         )}
         {!isLoading &&
-          !images.size && (
+          !hasImages && (
             <View style={styles.imageTitleWrap}>
-              <Text style={styles.imageTitle}>No photos from you. Add first from Feed-tab.</Text>
+              <Text style={styles.imageTitle} bold>
+                No photos from you. Add first from Feed-tab.
+              </Text>
             </View>
           )}
       </View>
@@ -88,6 +89,7 @@ class UserView extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     backgroundColor: theme.darker,
     padding: 0,
     paddingTop: 0,
@@ -113,11 +115,10 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 40,
     fontSize: 15,
-    fontWeight: '600',
   },
   imageTitleWrap: {
-    flex: 1,
-    marginTop: 0,
+    marginTop: 20,
+    minHeight: height - 460,
   },
 });
 
@@ -131,4 +132,7 @@ const mapStateToProps = state => ({
   tab: getCurrentTab(state),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserView);

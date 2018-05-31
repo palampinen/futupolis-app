@@ -186,7 +186,7 @@ class UserMap extends Component {
       title = 'Venue info';
     }
 
-    if (destinationPage){
+    if (destinationPage) {
       this.props.navigator.push({ component: destinationPage, name: title, showName: true });
     }
   }
@@ -275,7 +275,6 @@ class UserMap extends Component {
   @autobind
   fitMarkersToMap() {
     // const { visiblemarkerCoords } = this.props;
-
     // if (this.map && visiblemarkerCoords && visiblemarkerCoords.length > 1) {
     //   const padding = visiblemarkerCoords.length <= 2 ? 100 : 80;
     //   const edgePadding = { top: padding, bottom: padding, left: padding, right: padding };
@@ -377,27 +376,30 @@ class UserMap extends Component {
         {/* this.renderMarkerFilter() */}
         <View style={styles.mapWrap} delay={400} animationType="fade-in">
           <View style={{ flex: 1 }}>
-          {!!selectedCategory &&
-            <MapView
-              style={styles.map}
-              initialRegion={initialRegion}
-              showsUserLocation={this.props.locateMe}
-              showsPointsOfInterest={true}
-              showsBuildings={true}
-              showsIndoors={false}
-              rotateEnabled={false}
-              ref={map => {
-                this.map = map;
-              }}
-              customMapStyle={MAP_STYLE}
-              provider={PROVIDER_GOOGLE}
-            >
-              {markers}
-            </MapView>
-          }
+            {!!selectedCategory && (
+              <MapView
+                style={styles.map}
+                initialRegion={initialRegion}
+                showsUserLocation={this.props.locateMe}
+                showsPointsOfInterest={true}
+                showsBuildings={true}
+                showsIndoors={false}
+                rotateEnabled={false}
+                toolbarEnabled={false}
+                ref={map => {
+                  this.map = map;
+                }}
+                customMapStyle={MAP_STYLE}
+                provider={PROVIDER_GOOGLE}
+              >
+                {markers}
+              </MapView>
+            )}
           </View>
 
-          {isMapOpen && <LocateButton onPress={this.onLocatePress} isLocating={this.props.locateMe} />}
+          {isMapOpen && (
+            <LocateButton onPress={this.onLocatePress} isLocating={this.props.locateMe} />
+          )}
 
           {this.renderCustomCallout(selectedMarker)}
           {/* !selectedMarker && <MapTimeSelector /> */}
@@ -587,4 +589,7 @@ const mapDispatchToProps = {
   fetchMapPosts,
 };
 
-export default connect(mapViewData, mapDispatchToProps)(UserMap);
+export default connect(
+  mapViewData,
+  mapDispatchToProps
+)(UserMap);

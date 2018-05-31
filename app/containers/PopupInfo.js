@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 
 import { getSingleNotification, closeNotificationItem } from '../concepts/notifications';
 
-import { isIphoneX } from '../services/device-info';
+import { isIphoneX, IOS } from '../services/device-info';
 import PlatformTouchable from '../components/common/PlatformTouchable';
 import AnimateMe from '../components/AnimateMe';
 import Text from '../components/Text';
@@ -15,7 +15,6 @@ import theme from '../style/theme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 class PopupInfo extends Component {
-
   render() {
     const { popupInfoItem } = this.props;
 
@@ -33,11 +32,14 @@ class PopupInfo extends Component {
         animationType={'fade'}
       >
         <View style={styles.container}>
-
           <View style={styles.header}>
-            <PlatformTouchable onPress={this.props.closeNotificationItem}>
+            <PlatformTouchable
+              onPress={this.props.closeNotificationItem}
+              background={!IOS ? PlatformTouchable.SelectableBackgroundBorderless() : null}
+              delayPressIn={0}
+            >
               <View style={styles.button}>
-                <Icon name="close" style={styles.buttonIcon}/>
+                <Icon name="close" style={styles.buttonIcon} />
               </View>
             </PlatformTouchable>
 
@@ -45,11 +47,14 @@ class PopupInfo extends Component {
               <Text style={styles.title}>📣 New Notification 📣</Text>
             </AnimateMe>
 
-            <View style={{ width: 50, }}/>
+            <View style={{ width: 50 }} />
           </View>
 
-          <SingleNotification notification={popupInfoItem} />
-
+          <SingleNotification
+            notification={popupInfoItem}
+            noHeader
+            navigator={this.props.navigator}
+          />
         </View>
       </Modal>
     );
@@ -60,12 +65,12 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     flexGrow: 1,
-    backgroundColor: theme.dark
+    backgroundColor: theme.dark,
   },
   container: {
     flex: 1,
     flexGrow: 1,
-    backgroundColor: theme.dark
+    backgroundColor: theme.dark,
   },
   header: {
     position: 'relative',
@@ -73,8 +78,8 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     padding: 0,
-    paddingTop: isIphoneX ? 30 : 20,
-    height: isIphoneX ? 80 : 70,
+    paddingTop: IOS ? (isIphoneX ? 30 : 20) : 0,
+    height: IOS ? (isIphoneX ? 80 : 70) : 56,
     zIndex: 99,
     backgroundColor: theme.dark,
     alignItems: 'center',
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
   buttonIcon: {
     color: theme.white,
     fontSize: 22,
-  }
+  },
 });
 
 const select = store => ({
@@ -106,4 +111,7 @@ const select = store => ({
 
 const mapDispatch = { closeNotificationItem };
 
-export default connect(select, mapDispatch)(PopupInfo);
+export default connect(
+  select,
+  mapDispatch
+)(PopupInfo);

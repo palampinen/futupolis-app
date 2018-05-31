@@ -39,17 +39,31 @@ const links = [
 ];
 
 const terms = [
-  { title: 'Feedback', mailto: 'futupolisapp@gmail.com', icon: 'send' },
-  { title: 'Website', link: 'https://futupolis.com', icon: 'link', showInWebview: false },
+  { id: 'feedback', title: 'Feedback', mailto: 'futupolisapp@gmail.com', icon: 'send' },
   {
+    id: 'website',
+    title: 'Website',
+    link: 'https://futupolis.com',
+    icon: 'link',
+    showInWebview: false,
+  },
+  {
+    id: 'tos',
     title: 'Terms of Service',
     link: `${ROOT_URL}/terms.html`,
     icon: 'info-outline',
     component: TermsView,
     showInWebview: false,
   },
-  { title: 'Privacy', link: `${ROOT_URL}/privacy.html`, icon: 'lock-outline', showInWebview: true},
   {
+    id: 'privacy',
+    title: 'Privacy',
+    link: `${ROOT_URL}/privacy.html`,
+    icon: 'lock-outline',
+    showInWebview: true,
+  },
+  {
+    id: 'licenses',
     title: 'Licenses',
     link: `${ROOT_URL}/licences.html`,
     icon: 'help-outline',

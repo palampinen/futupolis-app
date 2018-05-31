@@ -100,4 +100,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = { fetchNotifications };
 
-export default connect(getNotificationsData, mapDispatchToProps)(NotificationsList);
+export default connect(
+  getNotificationsData,
+  mapDispatchToProps
+)(NotificationsList);

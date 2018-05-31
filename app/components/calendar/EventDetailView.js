@@ -23,7 +23,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ParallaxView from 'react-native-parallax-view';
 
 import theme from '../../style/theme';
-import Toolbar from './EventDetailToolbar';
+import ScrollHeader from '../header/ScrollHeader';
 import Text from '../Text';
 import Notification from '../common/Notification';
 import AnimateMe from '../AnimateMe';
@@ -43,7 +43,7 @@ import { INACTIVE, UNAVAILABLE, AVAILABLE, CHECKED } from '../../constants/Check
 import PlatformTouchable from '../common/PlatformTouchable';
 const IOS = Platform.OS === 'ios';
 const { width } = Dimensions.get('window');
-const placeholderSpeakerImage = require('../../../assets/futupolis/avatar--robot.png');
+const placeholderSpeakerImage = require('../../../assets/futupolis/avatar-robot.png');
 
 const VIEW_NAME = 'EventDetail';
 
@@ -320,9 +320,19 @@ class EventDetail extends Component {
     return (
       <View style={[styles.wrapper, wrapperStyleAdd]}>
         {!IOS ? (
-          <Toolbar
+          <ScrollHeader
             title={moment(model.startTime).format('ddd D.M.')}
-            navigator={this.props.navigator}
+            icon="arrow-back"
+            onIconClick={() => this.props.navigator.pop()}
+            extraStyles={{
+              elevation: 0,
+              backgroundColor: theme.darkLayer,
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              zIndex: 2,
+            }}
           />
         ) : null}
 
@@ -398,7 +408,8 @@ class EventDetail extends Component {
                     Time
                   </Text>
                   <Text style={styles.gridListItemPlace}>
-                    {moment(model.startTime).format('HH:mm')} - {moment(model.endTime).format('HH:mm')}
+                    {moment(model.startTime).format('HH:mm')} -{' '}
+                    {moment(model.endTime).format('HH:mm')}
                   </Text>
                 </View>
               </AnimateMe>
@@ -508,4 +519,7 @@ const select = store => {
   };
 };
 
-export default connect(select, mapDispatchToProps)(EventDetail);
+export default connect(
+  select,
+  mapDispatchToProps
+)(EventDetail);

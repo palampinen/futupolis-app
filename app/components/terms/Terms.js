@@ -3,23 +3,25 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ScrollView, Platform } from 'react-native';
 import theme from '../../style/theme';
-import Header from '../common/Header';
+import ScrollHeader from '../header/ScrollHeader';
 import Text from '../Text';
 
 const isIOS = Platform.OS === 'ios';
 
 class Terms extends Component {
   render() {
+    const { hideHeader } = this.props;
     const backgroundColor = this.props.backgroundColor || theme.dark;
     return (
       <View style={{ flex: 1, backgroundColor }}>
-        {!isIOS && (
-          <Header
-            backgroundColor={theme.secondary}
-            title="Terms of Service"
-            navigator={this.props.navigator}
-          />
-        )}
+        {!isIOS &&
+          !hideHeader && (
+            <ScrollHeader
+              title="Terms of Service"
+              icon="arrow-back"
+              onIconClick={() => this.props.navigator.pop()}
+            />
+          )}
         <ScrollView style={styles.container}>
           <View style={styles.content}>
             <Text style={styles.paragraph}>

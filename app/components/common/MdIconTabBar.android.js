@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   tabs: {
-    elevation: 5,
+    elevation: 6,
     height: 56,
     flexDirection: 'row',
     justifyContent: 'space-around',

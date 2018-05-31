@@ -281,7 +281,7 @@ class ImageEditor extends Component {
     return (
       <Fab onPress={this.sendImage} styles={styles.button} underlayColor={theme.stable}>
         <Text style={styles.buttonText}>
-          <Icon size={34} name="done" />
+          <Icon size={27} name="done" />
         </Text>
       </Fab>
     );
@@ -448,18 +448,17 @@ const styles = StyleSheet.create({
     zIndex: 9,
   },
   button: {
-    backgroundColor: theme.white,
-    height: 66,
-    width: 66,
-    borderRadius: 33,
+    backgroundColor: theme.orange,
+    height: 60,
+    width: 60,
+    borderRadius: 30,
     elevation: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     backgroundColor: 'transparent',
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 27,
     color: theme.dark,
   },
 });

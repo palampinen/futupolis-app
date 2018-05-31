@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     position: 'absolute',
-    bottom: IOS ? 0 : 20,
+    bottom: IOS ? 0 : 26,
     right: 20,
     overflow: 'visible',
     width: 200,
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     right: 43,
-    bottom: IOS ? 20 : 43,
+    bottom: IOS ? 20 : 49,
     position: 'absolute',
     backgroundColor: theme.white,
     opacity: 0.9,
@@ -262,7 +262,11 @@ class ActionButtons extends Component {
         },
       ];
 
-      const onActionButtonPress = this.onPressActionButtons.bind(this, actionTypeCode, this.props.onPressAction);
+      const onActionButtonPress = this.onPressActionButtons.bind(
+        this,
+        actionTypeCode,
+        this.props.onPressAction
+      );
 
       return (
         <Animated.View key={`button-${i}`} style={actionButtonStyles}>
@@ -366,4 +370,7 @@ const select = store => {
 };
 
 reactMixin(ActionButtons.prototype, TimerMixin);
-export default connect(select, mapDispatchToProps)(ActionButtons);
+export default connect(
+  select,
+  mapDispatchToProps
+)(ActionButtons);

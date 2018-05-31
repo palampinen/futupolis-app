@@ -2,15 +2,7 @@
 
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 import React, { Component } from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  PropTypes,
-  TouchableOpacity,
-  View,
-  Linking,
-} from 'react-native';
+import { Alert, Image, StyleSheet, PropTypes, TouchableOpacity, View, Linking } from 'react-native';
 import autobind from 'autobind-decorator';
 
 import { isEmpty, get } from 'lodash';
@@ -29,11 +21,10 @@ import FeedItemText from './FeedItemText';
 import MapLink from './MapLink';
 import RingLightImage from '../RingLight';
 
-
 const FEED_ITEM_MARGIN_DISTANCE = 0;
 const FEED_ITEM_MARGIN_DEFAULT = 0;
 const FEED_ADMIN_ITEM_MARGIN_DEFAULT = 15;
-const placeholderSpeakerImage = require('../../../assets/futupolis/avatar--robot.png');
+const placeholderSpeakerImage = require('../../../assets/futupolis/avatar-robot.png');
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -127,9 +118,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   itemAuthorAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: IOS ? 32 : 38,
+    height: IOS ? 32 : 38,
+    borderRadius: IOS ? 16 : 19,
     backgroundColor: theme.black,
     marginRight: 12,
     alignItems: 'center',
@@ -417,7 +408,7 @@ class FeedListItem extends Component {
   renderSkeletonItem() {
     return (
       <View style={[styles.itemWrapper, styles.skeletonWrap]}>
-        <View style={[styles.itemTouchable, { opacity: this.props.opacity || 1}]}>
+        <View style={[styles.itemTouchable, { opacity: this.props.opacity || 1 }]}>
           <View style={styles.itemContent}>
             <View style={[styles.feedItemListItemInfo, styles.skeletonHeader]}>
               <View style={styles.skeletonAvatar} />
@@ -459,7 +450,7 @@ class FeedListItem extends Component {
     const itemByMyTeam = this.itemIsCreatedByMyTeam(item);
     const isItemImage = item.type === 'IMAGE';
     const avatar = item.author.profilePicture;
-    const hasLocation = get(item, 'location.latitude') && get(item, 'location.longitude')
+    const hasLocation = get(item, 'location.latitude') && get(item, 'location.longitude');
 
     return (
       <View style={styles.itemWrapper}>
@@ -529,7 +520,6 @@ class FeedListItem extends Component {
                 openRegistrationView={this.props.openRegistrationView}
               />
 
-
               <CommentsLink
                 parentId={item.id}
                 commentCount={item.commentCount}
@@ -537,12 +527,7 @@ class FeedListItem extends Component {
                 reverse
               />
 
-              {hasLocation &&
-                <MapLink
-                  item={item}
-                  onPress={this.props.openFeedItemInMap}
-                />
-              }
+              {hasLocation && <MapLink item={item} onPress={this.props.openFeedItemInMap} />}
             </View>
           </View>
         </TouchableOpacity>

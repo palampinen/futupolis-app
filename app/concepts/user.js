@@ -8,6 +8,7 @@ import { VOTE_FEED_ITEM_REQUEST, SET_COMMENTS, DELETE_FEED_ITEM } from '../actio
 import { getUserId } from './registration';
 
 // # Selectors
+export const getUserName = state => state.user.getIn(['profile', 'name'], List()) || List();
 export const getUserImages = state => state.user.getIn(['profile', 'images'], List()) || List();
 export const getUserPicture = state => state.user.getIn(['profile', 'profilePicture'], '');
 export const getUserTeam = state => state.user.getIn(['profile', 'team'], List()) || List();
@@ -119,7 +120,7 @@ export default function city(state = initialState, action) {
 
     case DELETE_FEED_ITEM:
       const originalList = state.getIn(['myProfile', 'images'], List());
-      const itemIndex = originalList.findIndex((item) => item.get('id') === action.item.id);
+      const itemIndex = originalList.findIndex(item => item.get('id') === action.item.id);
 
       if (itemIndex < 0) {
         console.log('Tried to delete item, but it was not found from state:', itemIndex);

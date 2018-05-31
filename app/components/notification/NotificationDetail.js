@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SingleNotification from './SingleNotification';
 
-
 class NotificationDetail extends Component {
   propTypes: {
     navigator: PropTypes.object.isRequired,
@@ -11,7 +10,7 @@ class NotificationDetail extends Component {
 
   render() {
     const { model } = this.props.route;
-    return <SingleNotification notification={model} />
+    return <SingleNotification notification={model} navigator={this.props.navigator} />;
   }
 }
 

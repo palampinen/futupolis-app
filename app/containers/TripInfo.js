@@ -43,9 +43,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    marginBottom: 30,
+    marginBottom: IOS ? 30 : 0,
+    marginTop: IOS ? 0 : 3,
     backgroundColor: theme.darker,
-  }
+  },
 });
 
 class Profile extends Component {
@@ -65,13 +66,15 @@ class Profile extends Component {
 
   @autobind
   renderItem(item, index) {
-    return <ListItem
-      index={index}
-      item={item}
-      key={item.id}
-      navigator={this.props.navigator}
-      currentTab={this.props.currentTab}
-    />;
+    return (
+      <ListItem
+        index={index}
+        item={item}
+        key={item.id}
+        navigator={this.props.navigator}
+        currentTab={this.props.currentTab}
+      />
+    );
   }
 
   @autobind
@@ -83,7 +86,6 @@ class Profile extends Component {
     if (page < 0) {
       page = initialTabIndex;
     }
-
 
     return (
       <ScrollTabs
@@ -98,25 +100,19 @@ class Profile extends Component {
         renderTabBar={() => <TabBarItem height={40} />}
       >
         <ScrollView tabLabel="Info" style={styles.scrollView} id={Tabs.INFO}>
-          <View style={styles.cardWrap}>
-            {listData.map(this.renderItem)}
-          </View>
+          <View style={styles.cardWrap}>{listData.map(this.renderItem)}</View>
         </ScrollView>
         <NotificationList
           tabLabel="News"
           navigator={this.props.navigator}
-          id={Tabs.NOTIFICATIONS} />
+          id={Tabs.NOTIFICATIONS}
+        />
       </ScrollTabs>
     );
   }
 
   render() {
-
-    return (
-      <View style={styles.container}>
-        {this.renderContent()}
-      </View>
-    )
+    return <View style={styles.container}>{this.renderContent()}</View>;
   }
 }
 
@@ -128,4 +124,7 @@ const select = store => ({
   currentTripTab: getCurrentTripViewTab(store),
 });
 
-export default connect(select, mapDispatchToProps)(Profile);
+export default connect(
+  select,
+  mapDispatchToProps
+)(Profile);

@@ -8,7 +8,7 @@ import Tabs from '../../constants/Tabs';
 import SortTypes from '../../constants/SortTypes';
 import ScrollHeader from '../header/ScrollHeader';
 import PlatformTouchable from '../common/PlatformTouchable';
-import SortSelector from '../header/SortSelector';
+import ViewSelector from '../header/ViewSelector';
 
 const styles = StyleSheet.create({
   toolbar: {
@@ -42,12 +42,11 @@ const styles = StyleSheet.create({
 
 const getElevation = tab => {
   switch (tab) {
-    case Tabs.FEED:
-    case Tabs.MOOD:
-    case Tabs.CALENDAR:
-    case Tabs.SETTINGS: {
+    case Tabs.TRIP:
+    case Tabs.CALENDAR: {
       return 0;
     }
+
     default: {
       return 2;
     }
@@ -75,7 +74,7 @@ class MainHeader extends Component {
         headerProps = {
           renderRightContent: () => (
             <View style={styles.rightContent}>
-              <SortSelector />
+              <ViewSelector />
             </View>
           ),
         };

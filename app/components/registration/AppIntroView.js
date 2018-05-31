@@ -34,8 +34,7 @@ class AppIntroView extends Component {
     this.hideHeartPage = this.hideHeartPage.bind(this);
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
     setTimeout(this.hideHeartPage, heartPageShowTime);
   }
 
@@ -47,6 +46,8 @@ class AppIntroView extends Component {
     const { openLoginView, onClose, isLoginFailed } = this.props;
     const { showHeartPage } = this.state;
 
+    const showContent = !showHeartPage || isLoginFailed;
+
     return (
       <ModalBox
         isOpen={true}
@@ -55,40 +56,47 @@ class AppIntroView extends Component {
         animationDuration={0}
         style={{ backgroundColor: theme.black }}
       >
-
         {showHeartPage && !isLoginFailed && <HeartPage delay={heartPageShowTime} />}
 
-        <View style={[styles.iconWrap, styles.backgroundFace]}>
-          <Image
-            style={[styles.subImage, { width, height: height / 2.5 }]}
-            source={require('../../../assets/futupolis/face-fade.gif')}
-          />
-        </View>
-
-        <View style={{ flex: 1, zIndex: 10 }}>
-          <View style={[styles.slide, styles.slideIntro]}>
-            <View style={styles.topArea}>
-              {!showHeartPage && (
-                <AnimateMe animationType="scale-fade-in" delay={800} duration={800}>
-                  <View style={styles.iconWrap}>
-                    <Image
-                      style={[styles.subImage, styles.robotImage]}
-                      source={require('../../../assets/futupolis/robot.png')}
-                    />
-                  </View>
-                </AnimateMe>
-              )}
-            </View>
-            <SkipView
-              isLoginFailed={isLoginFailed}
-              onPressProfileLink={() => {
-                onClose();
-                openLoginView();
-              }}
+        {showContent && (
+          <View style={[styles.iconWrap, styles.backgroundFace]}>
+            <Image
+              style={[styles.subImage, { width, height: height / 2.5 }]}
+              source={require('../../../assets/futupolis/face-fade.gif')}
             />
           </View>
+        )}
 
-        </View>
+        {showContent && (
+          <View style={{ flex: 1, zIndex: 10 }}>
+            <View style={[styles.slide, styles.slideIntro]}>
+              <View style={styles.topArea}>
+                {!showHeartPage && (
+                  <AnimateMe
+                    animationType="scale-fade-in"
+                    style={{ flex: 1 }}
+                    delay={800}
+                    duration={800}
+                  >
+                    <View style={styles.iconWrap}>
+                      <Image
+                        style={[styles.subImage, styles.robotImage]}
+                        source={require('../../../assets/futupolis/robot.png')}
+                      />
+                    </View>
+                  </AnimateMe>
+                )}
+              </View>
+              <SkipView
+                isLoginFailed={isLoginFailed}
+                onPressProfileLink={() => {
+                  onClose();
+                  openLoginView();
+                }}
+              />
+            </View>
+          </View>
+        )}
       </ModalBox>
     );
   }
@@ -147,7 +155,7 @@ const styles = StyleSheet.create({
     top: isIphoneX ? -15 : -10,
     marginRight: -8,
     width: width - 200,
-    height: isIphoneX ? width - 105 :  width - 150,
+    height: isIphoneX ? width - 105 : width - 150,
   },
   icon: {
     // width: 200,

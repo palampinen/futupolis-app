@@ -57,9 +57,8 @@ const styles = StyleSheet.create({
   sectionHeader: {
     backgroundColor: IOS ? theme.dark : 'transparent',
     opacity: IOS ? 1 : 1,
-    padding: IOS ? 15 : 35,
+    padding: 0,
     paddingLeft: 15,
-    flexGrow: 1,
   },
   sectionHeaderAnnouncement: {
     backgroundColor: IOS ? theme.dark : 'transparent',
@@ -75,7 +74,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontWeight: 'normal',
     fontSize: IOS ? 16 : 16,
-    top: IOS ? 5 : 0,
     color: theme.white,
   },
 });

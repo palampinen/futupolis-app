@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Linking,
-  Image,
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Linking, Image } from 'react-native';
 import autobind from 'autobind-decorator';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -41,14 +35,14 @@ const getSubIcon = mainIcon => {
       animation = 'note';
       break;
     }
-    default: {}
+    default: {
+    }
   }
 
-  return {name, animation};
-}
+  return { name, animation };
+};
 
 class ListItem extends Component {
-
   constructor(props) {
     super(props);
 
@@ -111,50 +105,62 @@ class ListItem extends Component {
     }
 
     const IconComponent = animated ? AnimateMe : View;
-    const subIcon = getSubIcon(item.icon)
+    const subIcon = getSubIcon(item.icon);
 
     return (
-      <PlatformTouchable
-        key={index}
-        underlayColor={'#eee'}
-        activeOpacity={0.6}
-        delayPressIn={0}
-        style={styles.listItemButton}
-        // onPressIn={() => this.setState({ animated: true })}
-        // onPressOut={() => setTimeout(() => this.setState({ animated: false }), 1200)}
-        onPress={() =>
-          item.mailto
-            ? feedback.sendEmail(item.mailto)
-            : this.onLinkPress(item.link, item.title, item.showInWebview)
-        }
-      >
-        <View style={linkItemStyles}>
-          <LinearGradient
-            locations={[0, 0.5, 0.9]}
-            start={{ x: 0.1, y: 0.1 }}
-            end={{ x: 0.6, y: 0.9 }}
-            colors={['rgba(70,70,70,0.2)', theme.dark, theme.dark]}
-            style={styles.listItem}
-          >
-          <View style={styles.listItemIcons}>
-            {animated && subIcon.name &&
-              <IconComponent style={styles.subIconWrap} animationType={subIcon.animation} duration={2500}>
-                <IonIcon name={subIcon.name} style={styles.subIcon} />
-              </IconComponent>
-            }
-            <IconComponent style={styles.listItemIconWrap} animationType={item.icon} duration={2500}>
-              <Icon style={styles.listItemIcon} name={item.icon} />
-            </IconComponent>
-          </View>
+      <View style={styles.listItemButton}>
+        <PlatformTouchable
+          key={index}
+          underlayColor={'#eee'}
+          activeOpacity={0.6}
+          background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
+          delayPressIn={0}
+          style={styles.listItemButton}
+          // onPressIn={() => this.setState({ animated: true })}
+          // onPressOut={() => setTimeout(() => this.setState({ animated: false }), 1200)}
+          onPress={() =>
+            item.mailto
+              ? feedback.sendEmail(item.mailto)
+              : this.onLinkPress(item.link, item.title, item.showInWebview)
+          }
+        >
+          <View style={linkItemStyles}>
+            <LinearGradient
+              locations={[0, 0.5, 0.9]}
+              start={{ x: 0.1, y: 0.1 }}
+              end={{ x: 0.6, y: 0.9 }}
+              colors={['rgba(70,70,70,0.2)', theme.dark, theme.dark]}
+              style={styles.listItem}
+            >
+              <View style={styles.listItemIcons}>
+                {animated &&
+                  subIcon.name && (
+                    <IconComponent
+                      style={styles.subIconWrap}
+                      animationType={subIcon.animation}
+                      duration={2500}
+                    >
+                      <IonIcon name={subIcon.name} style={styles.subIcon} />
+                    </IconComponent>
+                  )}
+                <IconComponent
+                  style={styles.listItemIconWrap}
+                  animationType={item.icon}
+                  duration={2500}
+                >
+                  <Icon style={styles.listItemIcon} name={item.icon} />
+                </IconComponent>
+              </View>
 
-            <View style={styles.listItemTitles}>
-              <Text style={styles.listItemText}>{item.title}</Text>
-              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
-            </View>
-            {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
-          </LinearGradient>
-        </View>
-      </PlatformTouchable>
+              <View style={styles.listItemTitles}>
+                <Text style={styles.listItemText}>{item.title}</Text>
+                {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+              </View>
+              {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
+            </LinearGradient>
+          </View>
+        </PlatformTouchable>
+      </View>
     );
   }
 
@@ -170,7 +176,7 @@ class ListItem extends Component {
     }
 
     const IconComponent = animated ? AnimateMe : View;
-    const subIcon = getSubIcon(item.icon)
+    const subIcon = getSubIcon(item.icon);
 
     return (
       <PlatformTouchable
@@ -190,12 +196,21 @@ class ListItem extends Component {
             style={styles.listItem}
           >
             <View style={styles.listItemIcons}>
-              {animated && subIcon.name &&
-                <IconComponent style={styles.subIconWrap} animationType={subIcon.animation} duration={2500}>
-                  <IonIcon name={subIcon.name} style={styles.subIcon} />
-                </IconComponent>
-              }
-              <IconComponent style={styles.listItemIconWrap} animationType={item.icon} duration={2500}>
+              {animated &&
+                subIcon.name && (
+                  <IconComponent
+                    style={styles.subIconWrap}
+                    animationType={subIcon.animation}
+                    duration={2500}
+                  >
+                    <IonIcon name={subIcon.name} style={styles.subIcon} />
+                  </IconComponent>
+                )}
+              <IconComponent
+                style={styles.listItemIconWrap}
+                animationType={item.icon}
+                duration={2500}
+              >
                 <Icon style={styles.listItemIcon} name={item.icon} />
               </IconComponent>
             </View>
@@ -233,7 +248,6 @@ class ListItem extends Component {
       >
         <View style={linkItemStyles}>
           <View style={styles.listItem}>
-
             <View style={styles.listItemIcons}>
               <View style={styles.listItemIconWrap}>
                 <Icon style={styles.listItemIcon} name={item.icon} />
@@ -267,11 +281,8 @@ class ListItem extends Component {
     }
 
     return null;
-
   }
 }
-
-
 
 const styles = StyleSheet.create({
   listItem: {
@@ -286,15 +297,16 @@ const styles = StyleSheet.create({
   },
   listItemSeparator: {},
   listItemLast: {
-    marginBottom: IOS ? 0 : 20,
+    marginBottom: 0,
   },
   listItemButton: {
     backgroundColor: IOS ? theme.transparent : theme.dark,
     padding: 0,
-    width: (width / 2) - 9,
-    minHeight: isIphoneX ? (height-196) / 2 : (height-172) / 2,
+    width: IOS ? width / 2 - 9 : width / 2 - 7,
+    minHeight: IOS ? (isIphoneX ? (height - 196) / 2 : (height - 172) / 2) : (height - 196) / 2,
     margin: 3,
-    marginBottom: 0,
+    marginBottom: IOS ? 0 : 2,
+    marginTop: IOS ? 3 : 3,
     borderRadius: 5,
   },
   listItemIcons: {
@@ -309,6 +321,7 @@ const styles = StyleSheet.create({
   },
   listItemIconWrap: {
     marginBottom: 0,
+    flex: 0,
   },
   listItemIcon: {
     fontSize: 34,
@@ -376,9 +389,7 @@ const styles = StyleSheet.create({
 
   plainItem: {
     width,
-  }
-
+  },
 });
-
 
 export default ListItem;

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const noImageCover = require('../../../assets/prague/futubohemia/chilicorn.png');
+const noImageCover = require('../../../assets/futupolis/face-fade.gif');
 const blackColor = 'rgba(30,30,30,.5)';
 const orangeColor = 'rgba(253,95,0,.5)';
 
@@ -112,15 +112,13 @@ export default class EventListItem extends Component {
 
   render() {
     const { item, hideStatus, pastEvent, scrollPos, rowId } = this.props;
-    const timepoint = time.formatEventTime(item.startTime, item.endTime);
     const { coverImage } = item;
-    // const coverImage = item.coverImage ? item.coverImage.replace('https://', 'http://') : '';
     const itemAnimationStyles = {
       transform: [
         {
           translateY: scrollPos.interpolate({
             inputRange: [(rowId - 1) * ITEM_HEIGHT, rowId * ITEM_HEIGHT, (rowId + 1) * ITEM_HEIGHT],
-            outputRange: [0, 4, 8],
+            outputRange: [-6, 0, 6],
           }),
         },
       ],
@@ -129,7 +127,6 @@ export default class EventListItem extends Component {
     return (
       <PlatformTouchable
         onPress={this.props.handlePress}
-        underlayColor={'transparent'}
         activeOpacity={1}
         delayPressIn={0}
         background={!IOS ? PlatformTouchable.SelectableBackgroundBorderless() : null}
@@ -155,26 +152,10 @@ export default class EventListItem extends Component {
             </Text>
             <View style={styles.gridListItemMeta}>
               <Text style={styles.gridListItemTime}>
-                {/*timepoint.time} - {timepoint.endTime*/}
                 {moment(item.startTime).format('HH:mm')} - {moment(item.endTime).format('HH:mm')}
               </Text>
               <Text style={styles.gridListItemPlace}>{item.locationName}</Text>
             </View>
-
-            {/*this.props.currentDistance !== null && (
-              <View style={styles.gridListItemIconsWrapper__left}>
-                <Text style={styles.gridListItemDistance}>{this.props.currentDistance}</Text>
-              </View>
-            )*/}
-
-            {/*!hideStatus && (
-              <View style={styles.gridListItemIconsWrapper}>
-                {!pastEvent &&
-                  timepoint.onGoing && <Text style={styles.gridListItemIcon}>Ongoing!</Text>}
-                {!pastEvent &&
-                  timepoint.startsSoon && <Text style={styles.gridListItemIcon}>Starts soon!</Text>}
-              </View>
-            )*/}
           </View>
         </View>
       </PlatformTouchable>

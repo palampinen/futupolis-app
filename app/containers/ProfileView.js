@@ -1,12 +1,6 @@
-'use strict';
-
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Platform
-} from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { Navigator } from 'react-native-deprecated-custom-components';
-import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 
 import Profile from '../components/profile/Profile';
@@ -18,22 +12,14 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'ios' ? 20 : 0,
     backgroundColor: theme.darker,
   },
-  navbar: {
-    backgroundColor: theme.secondary,
-    height: 62,
-    paddingBottom: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  }
 });
-
 
 class ProfileView extends Component {
   @autobind
   renderScene(route, navigator) {
     if (route.component) {
       const RouteComponent = route.component;
-      return <RouteComponent route={route} {...this.props} />
+      return <RouteComponent route={route} {...this.props} />;
     }
   }
 
@@ -43,19 +29,15 @@ class ProfileView extends Component {
         style={styles.navigator}
         initialRoute={{
           component: Profile,
-          name: 'Settings'
+          name: 'Settings',
         }}
         renderScene={this.renderScene}
         configureScene={() => ({
-          ...Navigator.SceneConfigs.FloatFromRight
+          ...Navigator.SceneConfigs.FloatFromRight,
         })}
       />
     );
   }
 }
 
-const select = store => {
-  return {};
-};
-
-export default connect(select)(ProfileView);
+export default ProfileView;

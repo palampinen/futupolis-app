@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { PropTypes, Component } from 'react';
 import { Animated, Dimensions, View, StyleSheet, Text, Image } from 'react-native';
 import autobind from 'autobind-decorator';
@@ -14,7 +12,6 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: theme.dark,
-    elevation: 1,
     height: 56,
     flexDirection: 'row',
     alignItems: 'center',
@@ -59,6 +56,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 50,
     marginLeft: 16,
+    top: 2,
   },
   titleWrap: {
     flex: 1,
@@ -91,10 +89,11 @@ class ScrollHeader extends Component {
       rightIcon,
       onRightIconClick,
       renderRightContent,
+      extraStyles,
     } = this.props;
 
     return (
-      <View style={[styles.toolbar, { elevation, paddingRight: rightIcon ? 0 : 20 }]}>
+      <View style={[styles.toolbar, { elevation, paddingRight: rightIcon ? 0 : 20 }, extraStyles]}>
         {!!icon && (
           <View style={styles.iconWrap}>
             <PlatformTouchable
@@ -149,6 +148,7 @@ ScrollHeader.defaultProps = {
   onIconClick: noop,
   onRightIconClick: noop,
   renderRightContent: null,
+  extraStyles: {},
 };
 
 export default ScrollHeader;

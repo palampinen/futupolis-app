@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
   },
   url: {
     color: theme.blush,
-  }
+  },
 });
 
-const formatNotificationTime = (ISODate) => {
+const formatNotificationTime = ISODate => {
   const today = moment();
   const date = moment(ISODate);
 
@@ -104,7 +104,7 @@ const formatNotificationTime = (ISODate) => {
   }
 
   return date.format(format);
-}
+};
 
 class NotificationDetail extends Component {
   propTypes: {
@@ -113,11 +113,13 @@ class NotificationDetail extends Component {
   };
 
   render() {
+    const { noHeader } = this.props;
+
     const model = this.props.notification;
     const coverImage = model.get('picture');
     return (
       <View style={styles.wrapper}>
-        {!IOS ? <Toolbar title={''} navigator={this.props.navigator} /> : null}
+        {!IOS && !noHeader ? <Toolbar title={''} navigator={this.props.navigator} /> : null}
 
         <ParallaxView
           backgroundSource={coverImage ? { uri: coverImage } : placholderImage}

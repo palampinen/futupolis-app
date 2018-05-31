@@ -31,9 +31,7 @@ class DefaultTabBar extends Component {
         onPress={() => onPressHandler(page)}
       >
         <View style={[styles.tab, this.props.tabStyle]}>
-          <Text style={[{ color: textColor, top: IOS ? 4 : 0 }, textStyle || {}]}>
-            {IOS ? name : (name || '').toUpperCase()}
-          </Text>
+          <Text style={[{ color: textColor, top: IOS ? 4 : 0 }, textStyle || {}]}>{name}</Text>
         </View>
       </Button>
     );

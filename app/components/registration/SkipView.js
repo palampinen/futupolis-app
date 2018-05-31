@@ -5,6 +5,7 @@ import { View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-nat
 
 import theme from '../../style/theme';
 import PlatformTouchable from '../common/PlatformTouchable';
+import Button from '../common/Button';
 import Text from '../Text';
 import AnimateMe from '../AnimateMe';
 import Terms from '../terms/Terms';
@@ -30,40 +31,41 @@ class SkipView extends Component {
                   Login with your
                   <Text bold> @futurice </Text>email
                 </Text>
-                {this.props.isLoginFailed &&
+                {this.props.isLoginFailed && (
                   <AnimateMe animationType="drop-in">
-                    <Text style={styles.failureText}>Login failed, try again or contact futupolisapp@gmail.com</Text>
+                    <Text style={styles.failureText}>
+                      Login failed, try again or contact futupolisapp@gmail.com
+                    </Text>
                   </AnimateMe>
-                }
-
-
+                )}
               </View>
+
+              <View style={styles.loginButton}>
                 <PlatformTouchable
                   onPress={this.props.onPressProfileLink}
                   background={IOS ? null : PlatformTouchable.SelectableBackgroundBorderless()}
                 >
-                <View style={styles.loginButton}>
-                  <View style={{ flex: IOS ? 0 : 1}}>
+                  <View style={styles.loginButtonInner}>
                     <Text style={{ fontSize: 16, top: IOS ? 3 : 0, color: theme.darker }} bold>
                       LOGIN TO FUTUPOLIS
                     </Text>
                   </View>
-                </View>
                 </PlatformTouchable>
+              </View>
             </View>
 
             <View style={styles.termsLinkWrap}>
               <Text style={styles.termsText}>By logging in you accept</Text>
-              <TouchableOpacity onPress={() => this.setState({ showTerms: !showTerms})}>
+              <TouchableOpacity onPress={() => this.setState({ showTerms: !showTerms })}>
                 <Text style={styles.termsLink}>Terms of Service</Text>
               </TouchableOpacity>
             </View>
 
-            {showTerms &&
+            {showTerms && (
               <AnimateMe animationType="fade-in">
-                <Terms backgroundColor={theme.black} />
+                <Terms backgroundColor={theme.black} hideHeader />
               </AnimateMe>
-            }
+            )}
           </View>
         </ScrollView>
       </View>
@@ -140,18 +142,21 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingTop: 12,
     paddingBottom: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 25,
     elevation: 10,
     borderWidth: 0,
     backgroundColor: theme.white,
     width: 250,
   },
+  loginButtonInner: {
+    flex: IOS ? 0 : 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   failureText: {
     color: theme.blush,
     textAlign: 'center',
-    lineHeight: 17
+    lineHeight: 17,
   },
   termsLinkWrap: {
     justifyContent: 'center',
@@ -161,7 +166,7 @@ const styles = StyleSheet.create({
     color: theme.stable,
     textAlign: 'center',
     fontSize: 12,
-    lineHeight: 17
+    lineHeight: 17,
   },
   termsLink: {
     fontSize: 12,
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     color: theme.stable,
     textDecorationLine: 'underline',
     textDecorationColor: theme.stable,
-  }
+  },
 });
 
 export default SkipView;

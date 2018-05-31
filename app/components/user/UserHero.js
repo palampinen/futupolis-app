@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { cloneDeep } from 'lodash';
@@ -19,15 +19,11 @@ import Text from '../Text';
 const avatarFilterImage = require('../../../assets/futupolis/film-filter.png');
 const solidPattern = require('../../../assets/futupolis/solid.png');
 const robot = require('../../../assets/futupolis/face-fade.gif');
-const robotAvatar = require('../../../assets/futupolis/avatar--robot.png');
+const robotAvatar = require('../../../assets/futupolis/avatar-robot.png');
 
 class UserProfileHero extends Component {
   render() {
-    const {
-      userName,
-      userImage,
-      renderContent,
-    } = this.props;
+    const { userName, userImage, renderContent } = this.props;
 
     let { user } = this.props.route ? this.props.route : { user: null };
 
@@ -43,6 +39,7 @@ class UserProfileHero extends Component {
           windowHeight={250}
           style={{ backgroundColor: theme.dark, shadowOpacity: 0 }}
           scrollableViewStyle={{ shadowColor: theme.transparent }}
+          showsVerticalScrollIndicator={false}
           header={
             <View style={styles.header}>
               <Image
@@ -61,23 +58,25 @@ class UserProfileHero extends Component {
                   opacity: 0.25,
                 }}
               />
-              <AnimateMe delay={100} animationType="fade-from-bottom">
-                <Text style={styles.headerTitle} bold>{user.name}</Text>
+              <AnimateMe delay={100} animationType="fade-from-bottom" style={{ flex: 0 }}>
+                <Text style={styles.headerTitle} bold>
+                  {user.name}
+                </Text>
               </AnimateMe>
-
 
               {!IOS && (
                 <View style={styles.backLink}>
-                  <TouchableHighlight
-                    onPress={() => navigator.pop()}
-                    style={styles.backLinkText}
-                    underlayColor={'rgba(255, 255, 255, .1)'}
+                  <TouchableNativeFeedback
+                    onPress={() => this.props.navigator.pop()}
+                    background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
+                    delayPressIn={0}
                   >
-                    <Icon name="arrow-back" size={28} style={styles.backLinkIcon} />
-                  </TouchableHighlight>
+                    <View style={styles.backLinkText}>
+                      <Icon name="arrow-back" size={28} style={styles.backLinkIcon} />
+                    </View>
+                  </TouchableNativeFeedback>
                 </View>
               )}
-
             </View>
           }
         >
@@ -95,13 +94,13 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
-    paddingBottom: 15,
+    paddingBottom: IOS ? 15 : 25,
     // alignItems: 'center',
     justifyContent: 'flex-end',
   },
   headerTitle: {
     fontSize: 20,
-    paddingHorizontal: 15,
+    paddingHorizontal: IOS ? 15 : 25,
     textAlign: 'left',
     color: theme.white,
     backgroundColor: 'transparent',
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
   },
   placeholderAvatarStyles: {
     position: 'absolute',
-    left: (width/2)-150,
+    left: width / 2 - 150,
     width: 300,
     height: 300,
     top: -30,
@@ -173,9 +172,9 @@ const styles = StyleSheet.create({
   },
   backLink: {
     position: 'absolute',
-    left: 7,
-    top: 7,
-    zIndex: 2,
+    left: 15,
+    top: 15,
+    zIndex: 3,
   },
   backLinkText: {
     justifyContent: 'center',
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.transparent,
   },
   backLinkIcon: {
-    color: theme.orange,
+    color: theme.white,
   },
 });
 
@@ -194,4 +193,7 @@ const mapDispatchToProps = { openLightBox };
 
 const mapStateToProps = () => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfileHero);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserProfileHero);

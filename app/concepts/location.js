@@ -75,7 +75,7 @@ export const getLocationFromDevice = () => dispatch => {
   }
 
   return LocationServicesDialogBox.checkLocationServicesIsEnabled({
-    message: '<h3>Vask needs your location</h3>App needs to enable your location.',
+    message: '<h3>Futupolis needs your location</h3>App needs to enable your location.',
     ok: 'Enable Location',
     cancel: 'No thanks',
     enableHighAccuracy: true,

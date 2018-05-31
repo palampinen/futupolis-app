@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
-  ListView,
   ScrollView,
   TouchableOpacity,
   Linking,
@@ -18,15 +17,12 @@ import ScrollTabs from 'react-native-scrollable-tab-view';
 
 import theme from '../../style/theme';
 import { fetchLinks } from '../../actions/profile';
-import { getCurrentCityName } from '../../concepts/city';
 import { logoutUser } from '../../concepts/auth';
 import { getStoredUser, getUserPicture } from '../../concepts/registration';
-
 
 import ProfileHero from './ProfileHero';
 import TabBarItem from '../tabs/Tabs';
 import MyImages from './MyImages';
-import ListItem from './ListItem';
 import TextLink from './TextLink';
 
 const { width, height } = Dimensions.get('window');
@@ -35,19 +31,22 @@ const IOS = Platform.OS === 'ios';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.darker,
   },
   scrollView: {
     flex: 1,
     backgroundColor: theme.darker,
+    paddingTop: IOS ? 0 : 1,
   },
   cardWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
     marginBottom: 30,
+    paddingBottom: 30,
     backgroundColor: theme.darker,
-  }
+  },
 });
 
 class Profile extends Component {
@@ -57,33 +56,20 @@ class Profile extends Component {
     links: PropTypes.object.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataSource: new ListView.DataSource({ rowHasChanged: (row1, row2) => row1 !== row2 }),
-    };
-  }
-
   componentDidMount() {
     this.props.fetchLinks();
   }
 
   @autobind
-  renderItem(item) {
-    return <ListItem item={item} navigator={this.props.navigator}  />;
-  }
-
-  @autobind
   renderTextLink(item) {
-    return <TextLink item={item} navigator={this.props.navigator}  />;
+    return <TextLink item={item} navigator={this.props.navigator} key={item.id} />;
   }
 
   @autobind
   renderContent() {
-    const { name, links, terms, cityName, user, profilePicture, logoutUser } = this.props;
+    const { name, links, terms, user, profilePicture, logoutUser } = this.props;
 
     const listData = [].concat(links.toJS());
-
 
     const logoutItem = {
       title: 'Logout from App',
@@ -93,7 +79,7 @@ class Profile extends Component {
       id: 'logout',
     };
     const termsLinks = [].concat(terms.toJS());
-    termsLinks.push(logoutItem)
+    termsLinks.push(logoutItem);
 
     return (
       <ScrollTabs
@@ -101,42 +87,38 @@ class Profile extends Component {
         tabBarActiveTextColor={theme.blush}
         tabBarBackgroundColor={theme.dark}
         tabBarInactiveTextColor={theme.inactive}
-        locked={false}
         prerenderingSiblingsNumber={0}
-        renderTabBar={() => <TabBarItem height={50} />}
+        locked={false}
+        renderTabBar={() => <TabBarItem height={52} />}
       >
         <MyImages tabLabel="Photos" />
         <View tabLabel="Settings" style={styles.scrollView}>
-          <View style={styles.cardWrap}>
-            {/*listData.map(this.renderItem)*/}
-            {termsLinks.map(this.renderTextLink)}
-          </View>
+          <View style={styles.cardWrap}>{termsLinks.map(this.renderTextLink)}</View>
         </View>
       </ScrollTabs>
     );
   }
 
   render() {
-
     return (
       <View style={styles.container}>
         <ProfileHero renderContent={this.renderContent} />
       </View>
-    )
+    );
   }
 }
 
 const mapDispatchToProps = { fetchLinks, logoutUser };
 
 const select = store => ({
-  selectedTeam: store.registration.get('selectedTeam'),
-  teams: store.team.get('teams'),
   name: store.registration.get('name'),
   links: store.profile.get('links'),
   terms: store.profile.get('terms'),
-  cityName: getCurrentCityName(store),
   user: getStoredUser(store),
   profilePicture: getUserPicture(store),
 });
 
-export default connect(select, mapDispatchToProps)(Profile);
+export default connect(
+  select,
+  mapDispatchToProps
+)(Profile);

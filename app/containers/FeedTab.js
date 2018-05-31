@@ -8,7 +8,12 @@ import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { getFeedViewType, openFeedItemInMap, showMapView, showFeedView } from '../concepts/feed-view-type';
+import {
+  getFeedViewType,
+  openFeedItemInMap,
+  showMapView,
+  showFeedView,
+} from '../concepts/feed-view-type';
 import { getSelectedMarkerId } from '../concepts/user-map';
 import {
   postImage,
@@ -33,6 +38,7 @@ import TabBarItem from '../components/tabs/Tabs';
 import AnimateMe from '../components/AnimateMe';
 import Text from '../components/Text';
 import { IOS, width, height } from '../services/device-info';
+import permissions from '../services/android-permissions';
 
 class FeedTab extends Component {
   constructor(props) {
@@ -49,9 +55,9 @@ class FeedTab extends Component {
     this.props.updateCooldowns();
   }
 
-  setFeedListRef = (feedList) => {
+  setFeedListRef = feedList => {
     this.feedListRef = feedList;
-  }
+  };
 
   @autobind
   scrollTop() {
@@ -97,7 +103,6 @@ class FeedTab extends Component {
     }
   }
 
-
   @autobind
   openImagePicker() {
     ImagePickerManager.showImagePicker(ImageCaptureOptions, response => {
@@ -133,30 +138,45 @@ class FeedTab extends Component {
 
   render() {
     const { viewType, isRegistrationInfoValid, selectedMapMarker } = this.props;
-    const { stickyActionButtonsAnimation, actionButtonsAnimation, showScrollTopButton } = this.state;
+    const {
+      stickyActionButtonsAnimation,
+      actionButtonsAnimation,
+      showScrollTopButton,
+    } = this.state;
     const page = viewType === Tabs.FEED ? 0 : 1;
     const isMapPageVisible = viewType === Tabs.MAP;
 
-    const mapStyles = isMapPageVisible ? { flexGrow: 1 } : { height: 175, position: 'absolute' }
-    const feedStyles = isMapPageVisible ? { height: !selectedMapMarker ? 56 : 0 } : { flexGrow: 1 }
+    const mapStyles = isMapPageVisible ? { flexGrow: 1 } : { height: 175, position: 'absolute' };
+    const feedStyles = isMapPageVisible ? { height: !selectedMapMarker ? 56 : 0 } : { flexGrow: 1 };
 
     return (
       <View style={styles.container}>
-
         <View style={[styles.mapWrap, mapStyles]}>
           <MapView navigator={this.props.navigator} tabLabel="Map" isMapOpen={isMapPageVisible} />
         </View>
 
         <View style={feedStyles}>
-          {isMapPageVisible && !selectedMapMarker &&
-            <AnimateMe animationType="slide-fully-from-bottom" style={styles.toggleFeed} duration={300}>
-              <PlatformTouchable onPress={this.props.showFeedView} activeOpacity={0.8}>
-                <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={styles.toggleFeedText} bold>Back to List</Text>
-                </View>
-              </PlatformTouchable>
-            </AnimateMe>
-          }
+          {isMapPageVisible &&
+            !selectedMapMarker && (
+              <AnimateMe
+                animationType="slide-fully-from-bottom"
+                style={styles.toggleFeed}
+                duration={300}
+              >
+                <PlatformTouchable
+                  onPress={this.props.showFeedView}
+                  activeOpacity={0.8}
+                  background={PlatformTouchable.SelectableBackgroundBorderless()}
+                  delayPressIn={0}
+                >
+                  <View style={styles.toggleFeedButton}>
+                    <Text style={styles.toggleFeedText} bold>
+                      Back to List
+                    </Text>
+                  </View>
+                </PlatformTouchable>
+              </AnimateMe>
+            )}
 
           <FeedList
             navigator={this.props.navigator}
@@ -171,9 +191,11 @@ class FeedTab extends Component {
           />
         </View>
 
-        {(!selectedMapMarker || !isMapPageVisible) &&
+        {(!selectedMapMarker || !isMapPageVisible) && (
           <ActionButtons
-            visibilityAnimation={isMapPageVisible ? stickyActionButtonsAnimation : actionButtonsAnimation}
+            visibilityAnimation={
+              isMapPageVisible ? stickyActionButtonsAnimation : actionButtonsAnimation
+            }
             isRegistrationInfoValid={isRegistrationInfoValid}
             style={styles.actionButtons}
             isLoading={this.props.isLoadingActionTypes || this.props.isLoadingUserData}
@@ -181,7 +203,7 @@ class FeedTab extends Component {
             onScrollTop={this.scrollTop}
             showScrollTopButton={isMapPageVisible ? false : showScrollTopButton}
           />
-        }
+        )}
 
         <Notification visible={this.props.isNotificationVisible}>
           {this.props.notificationText}
@@ -193,11 +215,9 @@ class FeedTab extends Component {
           animationType={'fade'}
           image={this.props.editableImage}
         />
-
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -217,17 +237,21 @@ const styles = StyleSheet.create({
     backgroundColor: theme.dark,
   },
   toggleFeed: {
-    height: 56,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 0,
+    height: IOS ? 56 : 56,
     backgroundColor: theme.dark,
     borderTopWidth: 2,
     borderTopColor: theme.blush,
   },
+  toggleFeedButton: {
+    // flex: 1,
+    // flexGrow: 1,
+    paddingTop: IOS ? 0 : 17,
+  },
   toggleFeedText: {
     textAlign: 'center',
     color: theme.blush,
-    top: IOS ? 3 : 0
+    top: IOS ? 3 : 0,
   },
 });
 
@@ -256,4 +280,7 @@ const mapDispatchToProps = {
 };
 
 reactMixin(FeedTab.prototype, TimerMixin);
-export default connect(select, mapDispatchToProps)(FeedTab);
+export default connect(
+  select,
+  mapDispatchToProps
+)(FeedTab);
