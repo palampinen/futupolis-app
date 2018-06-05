@@ -15,7 +15,7 @@ const links = [
   },
   {
     title: 'Transportation',
-    subtitle: 'How to get to the hotel?',
+    subtitle: 'How to get to the hotel and venue?',
     link: `https://docs.google.com/spreadsheets/d/1mcIz1x2rLFS7LBD7Sqc_tPNudrmU1gRYgc5D8vSLyxM/edit`,
     icon: 'directions-bus',
     showInWebview: false,
@@ -48,7 +48,7 @@ const terms = [
     component: TermsView,
     showInWebview: false,
   },
-  { title: 'Privacy', link: `${ROOT_URL}/privacy.html`, icon: 'lock-outline', showInWebview: true},
+  { title: 'Privacy', link: `${ROOT_URL}/privacy.html`, icon: 'lock-outline', showInWebview: true },
   {
     title: 'Licenses',
     link: `${ROOT_URL}/licences.html`,

@@ -14,12 +14,12 @@ import {
 import { connect } from 'react-redux';
 
 import {
+  getUserName,
   getUserImages,
   getUserPicture,
   fetchUserImages,
   isLoadingUserImages,
 } from '../../concepts/user';
-import { getUserName, getUserId } from '../../concepts/registration';
 import { openLightBox } from '../../concepts/lightbox';
 
 import ParallaxView from 'react-native-parallax-view';
@@ -33,16 +33,9 @@ import UserHero from './UserHero';
 const headerImage = require('../../../assets/futupolis/face-fade.gif');
 const { height, width } = Dimensions.get('window');
 
-
 class UserView extends Component {
   render() {
-    const {
-      images,
-      isLoading,
-      userName,
-      navigator,
-      profilePicture,
-    } = this.props;
+    const { images, isLoading, userName, navigator, profilePicture } = this.props;
     let { user } = this.props.route;
 
     // Show Current user if not user selected
@@ -58,44 +51,45 @@ class UserView extends Component {
           userName={userName}
           userImage={profilePicture}
           renderContent={() => (
-          <View style={styles.container}>
-            {isLoading && (
-              <View style={styles.loader}>
-                <Loader size="large" />
-              </View>
-            )}
-            {images.size > 0 && (
-              <View style={styles.imageContainer}>
-                {images.map(image => (
-                  <View key={image.get('id')}>
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      onPress={() => this.props.openLightBox(image.get('id'))}
-                    >
-                      <Image
-                        key={image.get('id')}
-                        style={{
-                          height: width / 3 - 5,
-                          width: width / 3 - 5,
-                          margin: 2,
-                          backgroundColor: theme.darker,
-                          borderRadius: 3,
-                        }}
-                        source={{ uri: image.get('url') }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            )}
-            {!isLoading &&
-              !images.size && (
-                <View style={styles.imageTitleWrap}>
-                  <Text style={styles.imageTitle}>No photos</Text>
+            <View style={styles.container}>
+              {isLoading && (
+                <View style={styles.loader}>
+                  <Loader size="large" />
                 </View>
               )}
-          </View>
-        )} />
+              {images.size > 0 && (
+                <View style={styles.imageContainer}>
+                  {images.map(image => (
+                    <View key={image.get('id')}>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => this.props.openLightBox(image.get('id'))}
+                      >
+                        <Image
+                          key={image.get('id')}
+                          style={{
+                            height: width / 3 - 5,
+                            width: width / 3 - 5,
+                            margin: 2,
+                            backgroundColor: theme.darker,
+                            borderRadius: 3,
+                          }}
+                          source={{ uri: image.get('url') }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {!isLoading &&
+                !images.size && (
+                  <View style={styles.imageTitleWrap}>
+                    <Text style={styles.imageTitle}>No photos</Text>
+                  </View>
+                )}
+            </View>
+          )}
+        />
       </View>
     );
   }
@@ -205,8 +199,10 @@ const mapStateToProps = state => ({
   images: getUserImages(state),
   profilePicture: getUserPicture(state),
   isLoading: isLoadingUserImages(state),
-  userId: getUserId(state),
   userName: getUserName(state),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserView);
