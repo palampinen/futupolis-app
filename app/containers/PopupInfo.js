@@ -15,6 +15,29 @@ import theme from '../style/theme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 class PopupInfo extends Component {
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBack);
+  }
+
+  @autobind
+  handleBack() {
+    if (!this.props) {
+      return false;
+    }
+
+    // # selected marker
+    if (this.props.popupInfoItem && this.props.closeNotificationItem) {
+      this.props.closeNotificationItem();
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const { popupInfoItem } = this.props;
 

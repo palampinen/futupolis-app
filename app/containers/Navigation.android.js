@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, AppState } from 'react-native';
 
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
@@ -9,6 +9,7 @@ import autobind from 'autobind-decorator';
 import { changeTab } from '../actions/navigation';
 import { toggleCityPanel, getCityPanelShowState } from '../concepts/city';
 import { getUserPicture } from '../concepts/registration';
+import { refreshFeed } from '../actions/feed';
 import { getFeedSortType, setFeedSortType } from '../concepts/sortType';
 import CalendarView from './CalendarView';
 // import MoodView from './MoodView';
@@ -30,9 +31,26 @@ const ANDROID_TAB_ORDER = [Tabs.FEED, Tabs.CALENDAR, Tabs.TRIP, Tabs.SETTINGS];
 const initialTab = 0;
 
 class AndroidTabNavigation extends Component {
+  state = {
+    appState: AppState.currentState,
+  };
+
   componentDidMount() {
     this.props.changeTab(ANDROID_TAB_ORDER[initialTab]);
+    AppState.addEventListener('change', this._handleAppStateChange);
   }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = nextAppState => {
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      this.props.refreshFeed();
+    }
+
+    this.setState({ appState: nextAppState });
+  };
 
   @autobind
   onChangeTab({ i }) {
@@ -95,6 +113,7 @@ class AndroidTabNavigation extends Component {
 const mapDispatchToProps = {
   changeTab,
   setFeedSortType,
+  refreshFeed,
 };
 
 const select = state => {

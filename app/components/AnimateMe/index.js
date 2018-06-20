@@ -265,14 +265,14 @@ const getAnimationStyles = (type, animation) => {
           {
             translateY: animation.interpolate({
               inputRange: [0, 0.4, 0.65, 0.8, 0.9, 1],
-              outputRange: [100, -2, 0, -2, 0, -50],
+              outputRange: [100, -2, 0, -1, 0, -40],
             }),
           },
           { translateX: animation.interpolate({ inputRange: [0, 1], outputRange: [-50, -50] }) },
           {
             scale: animation.interpolate({
               inputRange: [0, 0.5, 0.65, 0.8, 0.9, 1],
-              outputRange: [0, 1, 0.9, 1, 0.9, 0],
+              outputRange: [0, 1, 0.9, 1, 0.95, 0],
             }),
           },
         ],
@@ -283,11 +283,14 @@ const getAnimationStyles = (type, animation) => {
         transform: [
           {
             translateY: animation.interpolate({
-              inputRange: [0, 0.4, 0.7, 0.8, 0.9, 1],
-              outputRange: [100, -5, 0, -2, 0, -50],
+              inputRange: [0, 0.4, 0.7, 0.8, 0.9, 1, 2],
+              outputRange: [100, -5, 0, -1, 0, -40, -40],
             }),
           },
-          { scale: animation.interpolate({ inputRange: [0, 0.9, 1], outputRange: [1, 1, 0] }) },
+          { translateX: animation.interpolate({ inputRange: [0, 2], outputRange: [0, 0] }) },
+          {
+            scale: animation.interpolate({ inputRange: [0, 0.9, 1, 2], outputRange: [1, 1, 0, 0] }),
+          },
         ],
       };
   }

@@ -1,11 +1,12 @@
 import React, { PropTypes, Component } from 'react';
-import { Animated, Dimensions, View, StyleSheet, Text, Image } from 'react-native';
+import { Animated, Dimensions, View, StyleSheet, Image } from 'react-native';
 import autobind from 'autobind-decorator';
 import { noop } from 'lodash';
 
 import PlatformTouchable from '../common/PlatformTouchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
+import Text from '../Text';
 
 const { width } = Dimensions.get('window');
 

@@ -18,6 +18,7 @@ target 'Futupolis' do
     # Pods for testing
     pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
 
+
   end
 
   target 'FutupolisTests' do

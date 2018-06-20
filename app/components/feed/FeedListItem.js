@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     width: IOS ? 32 : 38,
     height: IOS ? 32 : 38,
     borderRadius: IOS ? 16 : 19,
-    backgroundColor: theme.black,
+    backgroundColor: theme.dark,
     marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',

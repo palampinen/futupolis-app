@@ -14,18 +14,20 @@ import firebase from 'react-native-firebase';
 
 // # Selectors
 export const getNotifications = state => state.notifications.get('notifications', List()) || List();
-export const getSingleNotificationId = state => state.notifications.get('singleNotificationId', null) || null;
+export const getSingleNotificationId = state =>
+  state.notifications.get('singleNotificationId', null) || null;
 export const isLoading = state => state.notifications.get('isLoading', false);
 
 export const getSingleNotification = createSelector(
-  getNotifications, getSingleNotificationId, (notifications, id) => {
-
-    return notifications.get(id);
-  });
-
-export const getSortedNotifications = createSelector(
   getNotifications,
-  (notifications) => notifications
+  getSingleNotificationId,
+  (notifications, id) => {
+    return notifications.get(id);
+  }
+);
+
+export const getSortedNotifications = createSelector(getNotifications, notifications =>
+  notifications
     .toList()
     .sortBy(c => c.get('timestamp'))
     .reverse()
@@ -38,7 +40,7 @@ export const hasNewNotifications = createSelector(getSortedNotifications, notifi
   }
 
   return notifications.filter(n => n.get('new')).size;
-})
+});
 
 export const getNotificationsData = createStructuredSelector({
   notifications: getSortedNotifications,
@@ -62,7 +64,7 @@ export const showNotificationItem = id => dispatch => {
     updateLastCheckedId(id);
   }
   return dispatch({ type: SET_NOTIFICATION_ID, payload: id });
-}
+};
 
 export const closeNotificationItem = () => dispatch => dispatch(showNotificationItem(null));
 
@@ -75,32 +77,31 @@ export const fetchNotifications = () => (dispatch, getState) => {
     const currentNotifications = getNotifications(getState());
 
     // Get last check time
-    getCheckTime()
-    .then(lastCheckTime => {
-
+    getCheckTime().then(lastCheckTime => {
       const isExistingNotifications = currentNotifications && currentNotifications.size > 0;
 
       const newMessagesArray = map(newMessages, (item, id) => ({ id, timestamp: item.timestamp }));
       const latestMessage = maxBy(newMessagesArray, item => item.timestamp) || {};
       const latestMessageId = get(latestMessage, 'id');
-      const isUnreadMessage = lastCheckTime && latestMessage && parseInt(latestMessage.timestamp) > parseInt(lastCheckTime);
+      const isUnreadMessage =
+        lastCheckTime &&
+        latestMessage &&
+        parseInt(latestMessage.timestamp) > parseInt(lastCheckTime);
 
-
-      getLastCheckedId()
-      .then(lastCheckedId => {
+      getLastCheckedId().then(lastCheckedId => {
         const isAlreadySeenMessage = latestMessageId && lastCheckedId === latestMessageId;
 
         // Show popup in cases
         // - messages in store are updated
         // - or messages are loaded but user has not seen message yet (time and id rules)
-        const isOkToShowPopup = latestMessageId && !isAlreadySeenMessage && (isExistingNotifications || isUnreadMessage)
+        const isOkToShowPopup =
+          latestMessageId && !isAlreadySeenMessage && (isExistingNotifications || isUnreadMessage);
 
         // # Popup latest message
         if (isOkToShowPopup) {
-          dispatch(showNotificationItem(latestMessage.id))
+          dispatch(showNotificationItem(latestMessage.id));
         }
-      })
-
+      });
 
       dispatch({
         type: SET_NOTIFICATIONS,
@@ -112,7 +113,6 @@ export const fetchNotifications = () => (dispatch, getState) => {
       // Update check time
       updateCheckTime();
     });
-
   });
 };
 
@@ -121,7 +121,8 @@ const SET_UNREAD_NOTIFICATIONS_COUNT = 'notifications/SET_UNREAD_NOTIFICATIONS_C
 
 const UPDATE_NOTIFICATION_CHECK_TIME = 'notifications/UPDATE_NOTIFICATION_CHECK_TIME';
 
-const updateCheckTime = () => AsyncStorage.setItem(StorageKeys.notificationsLastChecked, toString(new Date().getTime()));
+const updateCheckTime = () =>
+  AsyncStorage.setItem(StorageKeys.notificationsLastChecked, toString(new Date().getTime()));
 const getCheckTime = () => AsyncStorage.getItem(StorageKeys.notificationsLastChecked);
 
 const updateLastCheckedId = id => AsyncStorage.setItem(StorageKeys.lastNotificationId, id);

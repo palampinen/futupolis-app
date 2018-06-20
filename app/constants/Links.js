@@ -15,7 +15,7 @@ const links = [
   },
   {
     title: 'Transportation',
-    subtitle: 'How to get to the hotel?',
+    subtitle: 'How to get to the hotel and venue?',
     link: `https://docs.google.com/spreadsheets/d/1mcIz1x2rLFS7LBD7Sqc_tPNudrmU1gRYgc5D8vSLyxM/edit`,
     icon: 'directions-bus',
     showInWebview: false,

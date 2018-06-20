@@ -17,6 +17,7 @@ import {
 } from '../actions/event';
 import { fetchMarkers as _fetchMarkers } from '../actions/marker';
 import { trackEvent } from '../services/analytics';
+import { getFeedViewType } from './feed-view-type';
 
 import { SET_COMMENTS } from './comments';
 import { DELETE_FEED_ITEM } from '../actions/feed';
@@ -28,6 +29,7 @@ import MarkerImages from '../constants/MarkerImages';
 import time from '../utils/time';
 import { BERLIN } from '../constants/Cities';
 import StorageKeys from '../constants/StorageKeys';
+import Tabs from '../constants/Tabs';
 
 // # Constants
 const MAP_QUERY_LIMIT = 15;
@@ -64,7 +66,7 @@ const getMarkers = createSelector(
   (markers, posts) => {
     const postMarkers = posts.filter(post => post.has('location'));
 
-    return postMarkers.concat(markers);  // posts on top of markers
+    return postMarkers.concat(markers); // posts on top of markers
     // return markers.concat(postMarkers); // markers on top of posts
   }
 );
@@ -111,6 +113,8 @@ const getSelectedMarker = createSelector(
   }
 );
 
+const isShowingMap = createSelector(getFeedViewType, viewType => viewType === Tabs.MAP);
+
 // View concept selector
 export const mapViewData = createStructuredSelector({
   currentCity: getCurrentCityName,
@@ -125,6 +129,7 @@ export const mapViewData = createStructuredSelector({
   markerLocations: getMarkerLocations,
   visiblemarkerCoords: getMapMarkersCoords,
   userLocation: getLocation,
+  isShowingMap,
 });
 
 // # Action types & creators
@@ -141,11 +146,10 @@ export const toggleLocateMe = () => (dispatch, getState) => {
   // fetch location if locateMe is OFF and will be toggled ON
   const maybeFetchLocationFirst = isLocatingAlready
     ? Promise.resolve(null)
-    : Promise.resolve(dispatch(fetchUserLocation()))
+    : Promise.resolve(dispatch(fetchUserLocation()));
 
-  return maybeFetchLocationFirst
-  .then(() => dispatch(_toggleLocateMe()));
-}
+  return maybeFetchLocationFirst.then(() => dispatch(_toggleLocateMe()));
+};
 
 export const selectMarker = (markerId, markerType) => ({
   type: SELECT_MARKER,
@@ -181,12 +185,13 @@ export const initializeUsersCitySelection = () => (dispatch, getState) =>
       console.log('error when initializing map category');
     });
 
-export const fetchMapPosts = () => (dispatch) => {
-
+export const fetchMapPosts = () => dispatch => {
   // Query Params
   const type = 'IMAGE'; // show only images
   const sort = SortTypes.SORT_NEW; // sort chronologically
-  const since = moment().subtract(2, 'weeks').toISOString(); // 2 weeks ago
+  const since = moment()
+    .subtract(2, 'weeks')
+    .toISOString(); // 2 weeks ago
   const limit = MAP_QUERY_LIMIT; // limit to 30
   const locationRequired = true;
 
@@ -206,8 +211,7 @@ export const fetchMapPosts = () => (dispatch) => {
     .catch(error => dispatch({ type: GET_MAP_POSTS_FAILURE, error: true, payload: error }));
 };
 
-
-export const checkIfPostExists = (item) => (dispatch, getState) => {
+export const checkIfPostExists = item => (dispatch, getState) => {
   const currentPosts = getAllMapPostsInStore(getState());
 
   const itemIndex = currentPosts.findIndex(post => post.get('id') === item.get('id'));
@@ -217,7 +221,7 @@ export const checkIfPostExists = (item) => (dispatch, getState) => {
   }
 
   return Promise.resolve();
-}
+};
 
 // # Reducer
 const initialState = fromJS({
@@ -278,7 +282,7 @@ export default function usermap(state = initialState, action) {
 
     case DELETE_FEED_ITEM:
       const originalList = state.get('posts');
-      const itemIndex = originalList.findIndex((item) => item.get('id') === action.item.id);
+      const itemIndex = originalList.findIndex(item => item.get('id') === action.item.id);
 
       if (itemIndex < 0) {
         console.log('Tried to delete item, but it was not found from state:', itemIndex);

@@ -101,8 +101,8 @@ android {
         applicationId "com.futupolis"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         manifestPlaceholders = [auth0Domain: "@string/auth0_domain", auth0Scheme: "https"]
         ndk {
             abiFilters "armeabi-v7a", "x86"

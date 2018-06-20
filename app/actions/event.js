@@ -25,7 +25,6 @@ const fetchEvents = () => (dispatch, getState) => {
   return api
     .fetchModels('events', { showPast: true })
     .then(events => {
-      console.log(events);
       dispatch({
         type: SET_EVENT_LIST,
         payload: events,

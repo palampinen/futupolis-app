@@ -175,6 +175,9 @@ const styles = StyleSheet.create({
     left: 15,
     top: 15,
     zIndex: 3,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   backLinkText: {
     justifyContent: 'center',

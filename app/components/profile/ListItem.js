@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     color: theme.inactive,
     top: 1,
     fontSize: 11,
-    lineHeight: 13,
+    lineHeight: 15,
     minHeight: 30, // "2 rows"
   },
 

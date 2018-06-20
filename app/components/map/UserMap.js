@@ -15,6 +15,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
+  BackHandler,
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { connect } from 'react-redux';
@@ -44,6 +45,7 @@ import CityCallout from './Callout/City';
 import LocateButton from './LocateButton';
 import AnimateMe from '../AnimateMe';
 import RingLight from '../RingLight';
+// import MapMarker from './MapMarker';
 
 import { CITY_CATEGORIES, BERLIN } from '../../constants/Cities';
 
@@ -56,6 +58,7 @@ import {
   fetchMapPosts,
 } from '../../concepts/user-map';
 
+import { showFeedView } from '../../concepts/feed-view-type';
 import { openComments } from '../../concepts/comments';
 import { openLightBox } from '../../concepts/lightbox';
 
@@ -91,6 +94,8 @@ class UserMap extends Component {
     //   //
     //   // https://github.com/airbnb/react-native-maps/issues/1003
     //   .then(() => setTimeout(this.fitMarkersToMap, IOS ? 0 : 500));
+
+    BackHandler.addEventListener('hardwareBackPress', this.handleBack);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,6 +122,34 @@ class UserMap extends Component {
       // HOX userlocation not immutable
       this.map.animateToCoordinate(nextProps.userLocation, 400);
     }
+  }
+
+  @autobind
+  handleBack() {
+    if (!this.props) {
+      return false;
+    }
+
+    // # on child route
+    const routes = this.props.navigator ? this.props.navigator.getCurrentRoutes() : null;
+    if (routes && routes.length > 1) {
+      this.props.navigator.pop();
+      return true;
+    }
+
+    // # selected marker
+    if (this.props.selectedMarker) {
+      this.onClosemarker();
+      return true;
+    }
+
+    // # just go back to feed view
+    if (this.props.isShowingMap) {
+      this.props.showFeedView();
+      return true;
+    }
+
+    return false;
   }
 
   getCityRegion(city) {
@@ -341,6 +374,22 @@ class UserMap extends Component {
     const markers = markersJS.map((location, index) => {
       const isSelectedMarker = selectedMarker && location.id === selectedMarker.get('id');
       const isMarkerIcon = this.isMarkerIcon(location);
+
+      /*
+      return (
+        <MapMarker
+          isSelectedMarker={isSelectedMarker}
+          isMarkerIcon={isMarkerIcon}
+          selectedMarker={selectedMarker}
+          location={location}
+          index={index}
+          markersCount={markersJS.length}
+          markerSource={this.getMarker(location)}
+          onPress={() => this.onSelectMarker(location)}
+        />
+      );
+      */
+
       const ImageComponent = isSelectedMarker && !isMarkerIcon ? RingLight : Image;
 
       return (
@@ -353,15 +402,19 @@ class UserMap extends Component {
           style={
             isSelectedMarker
               ? { zIndex: 999, opacity: 1 }
-              : { zIndex: parseInt(markersJS.length - index), opacity: !!selectedMarker ? 0.6 : 1 }
+              : { zIndex: parseInt(markersJS.length - index), opacity: !!selectedMarker ? 0.7 : 1 }
           }
         >
           <View style={isMarkerIcon ? styles.iconMarker : styles.avatarMarker}>
             <ImageComponent
-              style={isMarkerIcon ? styles.iconMarkerImage : styles.avatarMarkerImage}
+              style={[
+                isMarkerIcon ? styles.iconMarkerImage : styles.avatarMarkerImage,
+                !isMarkerIcon && isSelectedMarker && styles.selectedAvatarMarkerImage,
+              ]}
               source={this.getMarker(location)}
-              width={isMarkerIcon ? 20 : 24}
-              height={isMarkerIcon ? 20 : 24}
+              width={isMarkerIcon ? 20 : 28}
+              height={isMarkerIcon ? 20 : 28}
+              resizeMode="cover"
             />
           </View>
         </MapView.Marker>
@@ -376,6 +429,14 @@ class UserMap extends Component {
         {/* this.renderMarkerFilter() */}
         <View style={styles.mapWrap} delay={400} animationType="fade-in">
           <View style={{ flex: 1 }}>
+            {markersJS.map((location, index) => (
+              <Image
+                source={this.getMarker(location)}
+                style={{ width: 0, height: 0, opacity: 0 }}
+                onLoad={() => this.forceUpdate()}
+              />
+            ))}
+
             {!!selectedCategory && (
               <MapView
                 style={styles.map}
@@ -396,14 +457,12 @@ class UserMap extends Component {
               </MapView>
             )}
           </View>
-
           {isMapOpen && (
             <LocateButton onPress={this.onLocatePress} isLocating={this.props.locateMe} />
           )}
-
           {this.renderCustomCallout(selectedMarker)}
           {/* !selectedMarker && <MapTimeSelector /> */}
-          {this.renderCloseLayer(selectedMarker)}
+          {IOS && this.renderCloseLayer(selectedMarker)}
         </View>
       </View>
     );
@@ -448,15 +507,14 @@ const styles = StyleSheet.create({
     height: 20,
   },
   avatarMarker: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 30,
+    height: 30,
+    borderRadius: 0,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.white,
+    backgroundColor: theme.transparent,
 
-    elevation: 2,
     shadowColor: '#000000',
     shadowOpacity: 0.03,
     shadowRadius: 6,
@@ -466,9 +524,17 @@ const styles = StyleSheet.create({
     },
   },
   avatarMarkerImage: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: theme.white,
+  },
+  selectedAvatarMarkerImage: {
+    width: 26,
+    height: 26,
+    borderWidth: 0,
+    borderColor: theme.white,
   },
   loaderContainer: {
     position: 'absolute',
@@ -587,6 +653,7 @@ const mapDispatchToProps = {
   openComments,
   openLightBox,
   fetchMapPosts,
+  showFeedView,
 };
 
 export default connect(

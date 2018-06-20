@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   },
   gridListItemMetaInfo: {
     color: theme.white,
+    lineHeight: 17,
     opacity: 0.9,
   },
   gridListItemPlace: {
@@ -364,7 +365,7 @@ class EventDetail extends Component {
                     delay={(i + 1) * animationDuration}
                     animationType="fade-from-bottom"
                   >
-                    <View style={styles.gridListItemMeta__block}>
+                    <View style={[styles.gridListItemMeta__block, { left: -3 }]}>
                       <RingLightImage
                         source={speaker.image ? { uri: speaker.image } : placeholderSpeakerImage}
                         style={styles.speakerAvatar}
